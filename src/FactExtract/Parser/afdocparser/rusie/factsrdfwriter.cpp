@@ -50,11 +50,12 @@ void CFactsRDFWriter::AddFactsToStream(TOutputStream& out_stream, const CTextPro
 
         int iStart = -1, iEnd = -1;
         //может вернуть NULL, если это был, например, временный факт, или год у даты не влезает в sql
-        TXmlNodePtr piFact = WriteFact(factAddress, iFactID, pText, iStart, iEnd/*, leadGenerator*/);
+        Wtroka factId;
+        TXmlNodePtr piFact = WriteFact(factAddress, iFactID, pText, iStart, iEnd, factId);
         if (piFact.Get() != NULL) {
             FactIdMap[factAddress] = iFactID++;
 
-            Stroka uuid = Stroka("bnode") + CreateUid();
+            Wtroka uuid = factId.size() > 0 ? factId : CharToWide("bnode") + CharToWide(CreateUid());
             piFact.AddAttr("rdf:nodeID", uuid);
             GetXMLRoot().AddChild(piFact.Release());
 
@@ -90,7 +91,7 @@ void CFactsRDFWriter::AddFactsToStream(TOutputStream& out_stream, const CTextPro
     SaveSubTreeToStream(out_stream);
 }
 
-TXmlNodePtr CFactsRDFWriter::WriteFact(const SFactAddress& factAddress, int iFactId, const CTextProcessor& pText, int& iStart, int& iEnd/*, CLeadGenerator& leadGenerator*/) {
+TXmlNodePtr CFactsRDFWriter::WriteFact(const SFactAddress& factAddress, int iFactId, const CTextProcessor& pText, int& iStart, int& iEnd, Wtroka& factId) {
     const CFactFields& fact  = pText.GetFact(factAddress);
     const CDictsHolder* pDictsHolder = GlobalDictsHolder;
     const fact_type_t* pFactType = &pDictsHolder->RequireFactType(fact.GetFactName());
@@ -131,6 +132,9 @@ TXmlNodePtr CFactsRDFWriter::WriteFact(const SFactAddress& factAddress, int iFac
                                 }
                                 AddTextAttribute(pText, textWS, strVal, piFact, pSent, fieldDescr,
                                                  pFactType->m_strFactTypeName, factAddress);
+
+                                if (Stroka("id") == fieldDescr.m_strFieldName)
+                                    factId = strVal;
                                 break;
                             }
             case DateField:

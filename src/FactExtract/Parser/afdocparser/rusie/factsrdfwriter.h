@@ -32,7 +32,7 @@ private:
 //                             const SFactAddress& fact1, const SFactAddress& fact2,
 //                             EFactEntryEqualityType equalityType, Stroka fieldName1, Stroka fieldName2);
 
-    TXmlNodePtr WriteFact(const SFactAddress& factAddress, int iFactId, const CTextProcessor& pText, int& iStart, int& iEnd/*, CLeadGenerator& leadGenerator*/);
+    TXmlNodePtr WriteFact(const SFactAddress& factAddress, int iFactId, const CTextProcessor& pText, int& iStart, int& iEnd, Wtroka& factId);
 
     void AddBoolAttribute(bool val, TXmlNodePtrBase piFact, const fact_field_descr_t& fieldDescr);
 

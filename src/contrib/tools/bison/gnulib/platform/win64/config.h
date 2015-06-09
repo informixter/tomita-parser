@@ -1703,3 +1703,6 @@ char *strsignal (int signum);
 
 /* Define as a macro for copying va_list variables. */
 #define va_copy gl_va_copy
+
+/* For correct Visual C++ 2013 64bit build */
+#include "missing_decl.h"

@@ -28,6 +28,7 @@
 #include <quotearg.h>
 #include <stdio-safer.h>
 #include <xstrndup.h>
+#include <xalloc.h>
 
 #include "complain.h"
 #include "files.h"

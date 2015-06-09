@@ -669,7 +669,7 @@ Wtroka CNormalization::GetCapitalizedLemma(const CWord& w, const Wtroka& strLemm
         }
     } else {
         static const Wtroka delims = CharToWide("_ ");
-        StringTokenizer<Wtroka> words(w.GetText(), delims);
+        StringTokenizer<Wtroka> words(w.GetText(), (const TStringBufImpl<wchar16, TCharTraits<wchar16>>)delims); // Иначе Visual Studio 2013 выдаёт ошибку C2668
         bool bFirst = true;
         bool bHReg1 = false;
         bool bHReg2 = false;

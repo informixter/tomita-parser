@@ -33,6 +33,9 @@ public:
     //ф-ция берет заданное поле из уже построенного другой грамматикой факта
     bool TryCutOutFactField(CFactSynGroup* pItem, const fact_field_reference_t& rFieldRef) const;
 
+	// Внутренняя рекурсивная реализация ф-ции TryCutOutFactField
+	bool TryCutOutFactFieldInner(const CFactSynGroup* pItem, const fact_field_reference_t& rFieldRef, yvector<CFactFields>& newFacts) const;
+
     //ф-ция разбивает все можество фактов на подмножества по имени факта
     void DivideFactsSetIntoSubsets(CFactSubsets& rFactSubsets, const yvector<CFactFields>& vec_facts) const;
 

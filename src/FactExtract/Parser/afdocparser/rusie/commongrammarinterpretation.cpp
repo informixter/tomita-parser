@@ -202,19 +202,39 @@ bool CCommonGrammarInterpretation::AddFactField(SReduceConstraints* pConstr) con
     return (pConstr->Get().m_FactsInterpretation.size() > 0);
 }
 
-//ф-ция берет заданное поле из уже построенного другой грамматикой факта
-bool CCommonGrammarInterpretation::TryCutOutFactField(CFactSynGroup* pItem, const fact_field_reference_t& rFieldRef) const
-{
-    CWordSequence* pWsq = pItem->GetFirstMainHomonym()->GetSourceWordSequence();
-    CFactsWS* factWS = dynamic_cast<CFactsWS*>(pWsq);
-    if (NULL == factWS) return false;
+bool CCommonGrammarInterpretation::TryCutOutFactFieldInner(const CFactSynGroup* pItem, const fact_field_reference_t& rFieldRef, yvector<CFactFields>& newFacts) const {
+	bool bRes = false;
 
-    bool bRes = FillFactFieldFromFactWS(rFieldRef, factWS, pItem->m_Facts);
+	// Поищем у всех вложенных групп.
+	for (size_t i = 0; i < pItem->ChildrenSize(); i++) {
+		const CGroup* pGroup = pItem->GetChild(i);
+		CWordSequence* pWsq = pGroup->GetFirstMainHomonym()->GetSourceWordSequence();
+		// TODO: Непонятно, не нужно ли поискать у каждого из омонимов.
 
-    //если не можем найти нужное поле в факте, то возвращаем false,
-    //чтобы приписать просто текст, соответсвующий обрабатываемому терминалу,
-    //но если есть помета eOnlyFromFact, то в любом случае возвращаем true,
-    //чтобы уже не приписывать весь текст.
+		if (NULL != pWsq) {
+			CFactsWS* factWS = dynamic_cast<CFactsWS*>(pWsq);
+			if (NULL != factWS)
+				bRes = bRes || FillFactFieldFromFactWS(rFieldRef, factWS, newFacts);
+		}
+
+		// Повторим для групп уровнем ниже
+		const CFactSynGroup *pFactSynGroup = dynamic_cast<const CFactSynGroup*>(pGroup);
+		if (NULL != pFactSynGroup)
+			bRes = bRes || TryCutOutFactFieldInner(pFactSynGroup, rFieldRef, newFacts);
+	}
+
+	return bRes;
+}
+
+// ф-ция берет заданное поле из уже построенного другой грамматикой факта
+bool CCommonGrammarInterpretation::TryCutOutFactField(CFactSynGroup* pItem, const fact_field_reference_t& rFieldRef) const {
+
+	bool bRes = TryCutOutFactFieldInner(pItem, rFieldRef, pItem->m_Facts);
+
+    // Если не можем найти нужное поле в факте, то возвращаем false,
+    // чтобы приписать просто текст, соответсвующий обрабатываемому терминалу,
+    // но если есть помета eOnlyFromFact, то в любом случае возвращаем true,
+    // чтобы уже не приписывать весь текст.
     if (rFieldRef.m_eFactAlgorithm.Test(eOnlyFromFact))
         return true;
     else

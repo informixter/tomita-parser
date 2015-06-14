@@ -46,11 +46,15 @@ TSimpleLemmer::TSimpleLemmer(const Stroka& path) {
         else
             libPath = GetCwd() + Stroka("/") + prgDir;
         SlashFolderLocal(libPath);
-        libPath += Stroka("libmystem_c_binding.so");
+        libPath += Stroka("libmystem_c_binding.dll");
         //Cerr << "libPath == " << libPath << Endl;
     }
 
+#ifdef _win32_
+	Lib.Open(~libPath, DEFAULT_DLLOPEN_FLAGS);
+#else
     Lib.Open(~libPath, RTLD_NOW | RTLD_DEEPBIND | RTLD_NODELETE);
+#endif
 
     if (!IsInitialized())
         yexception() << "Can't load lemmer from \"" << path << "\"";

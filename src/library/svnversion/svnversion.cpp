@@ -40,6 +40,7 @@ extern "C" const char* GetProgramVersionTag() {
 #elif defined(GIT_TAG)
     return GIT_TAG;
 #endif
+	return "Unknown";
 }
 
 extern "C" void PrintProgramSvnVersion() {

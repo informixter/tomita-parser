@@ -46,8 +46,11 @@ TSimpleLemmer::TSimpleLemmer(const Stroka& path) {
         else
             libPath = GetCwd() + Stroka("/") + prgDir;
         SlashFolderLocal(libPath);
+#ifdef _win32_
         libPath += Stroka("libmystem_c_binding.dll");
-        //Cerr << "libPath == " << libPath << Endl;
+#else
+		libPath += Stroka("libmystem_c_binding.so");
+#endif
     }
 
 #ifdef _win32_

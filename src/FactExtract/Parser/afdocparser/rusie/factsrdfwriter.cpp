@@ -192,10 +192,14 @@ void CFactsRDFWriter::PrintError(const Stroka& str) {
     (*m_pErrorStream) << str << Endl;
 }
 
+static ui8 rndSeed = 0;
+
 Stroka CreateUid() {
     Stroka s;
     for (size_t i = 0; i < 16; i++) {
-        ui8 x = RandomNumber<ui8>();
+        ui8 x = 0;
+        x = rndSeed++;
+        //x = RandomNumber<ui8>();
         if (3 == i || 5 == i || 7 == i || 9 == i)
             fcat(s, "%02hhX-", x);
         else

@@ -2,6 +2,7 @@
 
 #include "processor.h"
 #include <FactExtract/Parser/common/smartfilefind.h>
+#include <FactExtract/Parser/lemmerlib/extlemmer.h>
 
 #ifdef _win_
 #include <fcntl.h>
@@ -59,6 +60,9 @@ bool CProcessor::Init(int argc, char* argv[])
                 WriteInformation("Bad parameters.\n" + m_Parm.m_strError);
                 return false;
         }
+
+        // Load lemmer
+        Singleton<NLemmer::TSimpleLemmer>()->Init("", m_Parm.GetLemmerLibName(), m_Parm.GetLanguage());
 
         Retriever = &Factory.GetDocRetriever();
         DocStream = &Factory.GetDocStream();

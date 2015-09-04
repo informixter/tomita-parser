@@ -182,6 +182,14 @@ docLanguage CCommonParm::GetLanguage() const {
     return LANG_RUS;
 }
 
+Stroka CCommonParm::GetLemmerLibName() const {
+    if (NULL != Config.Get() && Config->has_lemmerlibname())
+        return Config->lemmerlibname();
+
+    return Stroka("");
+}
+
+
 Stroka CCommonParm::GetInputFileName() const {
     return m_strInputFileName;
 }

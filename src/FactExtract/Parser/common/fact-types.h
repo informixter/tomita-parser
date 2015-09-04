@@ -82,8 +82,8 @@ public:
     void Load(TInputStream* buffer);
 };
 
-//в структуре определяются операции, которые выполняются на процедуре Reduce правила грамматики для данного экземпляра поля факта
-//fact_field_processing_t
+// в структуре определяются операции, которые выполняются на процедуре Reduce правила грамматики
+// для данного экземпляра поля факта fact_field_processing_t
 struct fact_field_reference_t : public fact_field_descr_t,
                                  public CFieldAlgorithmInfo
 {
@@ -92,9 +92,9 @@ struct fact_field_reference_t : public fact_field_descr_t,
                                 m_bHasValue(false)
     {}
     Stroka    m_strFactTypeName;
-    Stroka    m_strSourceFieldName;    //имя поля, откуда копировать значение этого поля (оператор from)
-    Stroka    m_strSourceFactName;    //имя факта, откуда копировать значение этого поля (оператор from)
-    bool    m_bHasValue;
+    Stroka    m_strSourceFieldName;    // имя поля, откуда копировать значение этого поля (оператор from)
+    Stroka    m_strSourceFactName;     // имя факта, откуда копировать значение этого поля (оператор from)
+    bool      m_bHasValue;
 
     void Save(TOutputStream* buffer) const;
     void Load(TInputStream* buffer);

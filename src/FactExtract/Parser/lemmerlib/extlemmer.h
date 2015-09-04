@@ -10,8 +10,10 @@ class TSimpleLemmer {
     TDynamicLibrary Lib;
 
 public:
-    TSimpleLemmer(const Stroka& path = "");
+    TSimpleLemmer() { }
     ~TSimpleLemmer();
+
+    void Init(const Stroka& path = "", const Stroka& name = "", const docLanguage& lang = LANG_UNK);
 
     bool IsInitialized() const;
     inline TDynamicLibrary& GetLibrary() {

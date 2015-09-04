@@ -143,4 +143,6 @@ message TTextMinerConfig {
 
   optional bool UseOldLemmer = 20 [default = false];
   // Использовать старый леммер Яндекса
+
+  optional string LemmerLibName = 21 [default = ""];
 }

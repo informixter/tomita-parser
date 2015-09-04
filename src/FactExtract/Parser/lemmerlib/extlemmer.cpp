@@ -37,30 +37,56 @@ namespace NLemmer {
 class TGrammarFiltr;
 TGrammarFiltr* GetNewDummyGrammarFiltr(const char* grammar);
 
-TSimpleLemmer::TSimpleLemmer(const Stroka& path) {
+#define MYSTEM_LIB_NAME "libmystem_c_binding"
+#define AOT_LIB_NAME "libaot_lemmer"
+
+void TSimpleLemmer::Init(const Stroka& path, const Stroka& name, const docLanguage& lang) {
     Stroka libPath = path;
+    Stroka libName = name;
+
+    if (name.length() == 0) {
+        if (LANG_RUS == lang)
+            libName = MYSTEM_LIB_NAME;
+        else if (LANG_ENG == lang)
+            libName = AOT_LIB_NAME;
+        else
+            yexception() << "Don't know default liblemmer name for language \"" << NameByLanguage(lang) << "\".\n"
+                         << "Use \"LemmerLibName\" configuration parameter to specify one.";
+    }
+
+#ifdef _win32_
+    if (libName.size() > 4 && to_lower(libName.substr(libName.size()-4)) != Stroka(".dll"))
+        libName += ".dll";
+#else
+    if (libName.size() > 3 && to_lower(libName.substr(libName.size()-3)) != Stroka(".so"))
+        libName += ".so";
+#endif
+
     if (path.length() == 0) {
         Stroka prgDir = GetProgramDir();
         if ((prgDir.length() > 1 && prgDir[1] == ':') || (prgDir.length() > 0 && prgDir[0] == '/'))
             libPath = prgDir;
         else
             libPath = GetCwd() + Stroka("/") + prgDir;
+
         SlashFolderLocal(libPath);
-#ifdef _win32_
-        libPath += Stroka("libmystem_c_binding.dll");
-#else
-		libPath += Stroka("libmystem_c_binding.so");
-#endif
+
+        libPath += libName;
     }
 
+    Cerr << libPath << Endl;
+
 #ifdef _win32_
-	Lib.Open(~libPath, DEFAULT_DLLOPEN_FLAGS);
+    if (path.size() > 0)
+        Lib.Open(~libPath, DEFAULT_DLLOPEN_FLAGS);
+    else
+        Lib.Open(libName, DEFAULT_DLLOPEN_FLAGS);
 #else
     Lib.Open(~libPath, RTLD_NOW | RTLD_DEEPBIND | RTLD_NODELETE);
 #endif
 
     if (!IsInitialized())
-        yexception() << "Can't load lemmer from \"" << path << "\"";
+        yexception() << "Can't load lemmer \"" << name << "\" from \"" << path << "\"";
 }
 
 bool TSimpleLemmer::IsInitialized() const {

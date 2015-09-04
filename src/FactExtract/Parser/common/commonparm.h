@@ -70,6 +70,8 @@ public:
     virtual Stroka GetBinaryDir() const;
     virtual bool UseOldLemmer() const; // Использовать ли старый Яндекс-леммер (BYK) или новый
 
+    virtual Stroka GetLemmerLibName() const;
+
     virtual CParserOptions* GetParserOptions() {
         return ParserOptions.Get();
     }

@@ -223,7 +223,15 @@ void copy_from_aot(TAotLemma& aotLemma, const CFormInfo &fi, const char* word) {
   Ancode *pA = find_ancode(fi.GetSrcAncode());
   std::vector<const char*> vFlexGrm;
   vFlexGrm.push_back(pA->flexGram);
-  aotLemma.Init(fi.m_bFound?UTF8ToWide(fi.GetSrcNorm()):UTF8ToWide(Stroka(word)), UTF8ToWide(Stroka(word)), pA->stemGram, vFlexGrm, fi.GetParadigmId());
+
+  Stroka stemGrm = pA->stemGram;
+  if (fi.GetCommonAncode().size() > 0) {
+    Ancode *pA2 = NULL;
+    pA2 = find_ancode(fi.GetCommonAncode());
+    if (NULL != pA2)
+      stemGrm += pA2->flexGram;
+  }
+  aotLemma.Init(fi.m_bFound?UTF8ToWide(fi.GetSrcNorm()):UTF8ToWide(Stroka(word)), UTF8ToWide(Stroka(word)), stemGrm.c_str(), vFlexGrm, fi.GetParadigmId());
 
 
 //  string ancode = fi.GetSrcAncode();

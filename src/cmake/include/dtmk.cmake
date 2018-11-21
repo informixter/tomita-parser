@@ -188,7 +188,8 @@ ELSE ()
     ENDIF ()
 
     # Issue: YMAKE-169 (workaround for FreeBSD-10)
-    IF (CMAKE_SYSTEM MATCHES "FreeBSD-10.0")
+    # Issue: https://github.com/yandex/tomita-parser/issues/48 (workaround for Ubuntu 16.04 and Fedora 24)
+    IF (CMAKE_SYSTEM MATCHES "FreeBSD-10.0" OR ${GCC_VERSION} VERSION_GREATER "5.3")
         SET_APPEND(CMAKE_CXX_FLAGS -D _GLIBCXX_USE_C99_FP_MACROS_DYNAMIC)
     ENDIF ()
 
@@ -601,7 +602,7 @@ SET(VARI "")
 IF (WIN32 OR ADDINCLSELF)
     SET(ADDINCL ${CMAKE_CURRENT_SOURCE_DIR})
 ELSE ()
-    SET_APPEND(DTMK_CFLAGS "-iquote" "${CMAKE_CURRENT_SOURCE_DIR}")
+    SET_APPEND(DTMK_CFLAGS "-iquote" "\"${CMAKE_CURRENT_SOURCE_DIR}\"")
 ENDIF ()
 
 FOREACH(DIR ${ADDINCL})

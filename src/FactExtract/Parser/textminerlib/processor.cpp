@@ -44,7 +44,7 @@ void CProcessor::InitInterviewFile(Stroka strNameFile)
 
         url = StripString(url);
         fio = StripString(fio);
-        InterviewUrl2Fio[ToString(url)] = NStr::Decode(ToString(fio), m_Parm.GetInputEncoding());
+        InterviewUrl2Fio[ToString(url)] = CharToWide(ToString(fio), m_Parm.GetInputEncoding());
     }
 }
 
@@ -77,6 +77,20 @@ bool CProcessor::Init(int argc, char* argv[])
 
         Singleton<CDictsHolder>()->s_bForceRecompile = m_Parm.GetForceRecompile();
         Singleton<CDictsHolder>()->s_maxFactsCount = m_Parm.GetMaxFactsCountPerSentence();
+
+        switch (m_Parm.GetBastardMode()) {
+            case CCommonParm::EBastardMode::no:
+                Singleton<CDictsHolder>()->s_BastardMode = EBastardMode::No;
+                break;
+      
+            case CCommonParm::EBastardMode::outOfDict:
+                Singleton<CDictsHolder>()->s_BastardMode = EBastardMode::OutOfDict;
+                break;
+
+            case CCommonParm::EBastardMode::always:
+                Singleton<CDictsHolder>()->s_BastardMode = EBastardMode::Always;
+                break;
+        }
 
         CSimpleProcessor::Init(dicDir, m_Parm.GetLanguage(), m_Parm.GetBinaryDir(), m_Parm.NeedAuxKwDict(), m_Parm.GetLangDataEncoding());
 

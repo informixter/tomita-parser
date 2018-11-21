@@ -1,4 +1,5 @@
 #include "word.h"
+#include <FactExtract/Parser/common/utilit.h>
 #include <FactExtract/Parser/afdocparser/common/wordsequence.h>
 #include <FactExtract/Parser/surname_predictor/surname_predictor.h>
 #include <FactExtract/Parser/afdocparser/rus/morph.h>
@@ -88,7 +89,7 @@ void CWord::AddFio(yset<Wtroka>& fioStrings, bool bIndexed)
 
 bool CWord::IsEndOfStreamWord() const
 {
-    return m_typ == UnknownPrim && NStr::IsEqual(m_txt, "EOS");
+    return m_typ == UnknownPrim && m_txt == Wtroka::FromAscii("EOS");
 }
 
 void CWord::UniteHomonymsTerminalSymbols()

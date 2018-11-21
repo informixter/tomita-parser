@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include <FactExtract/Parser/common/wordhomonymnum.h>
-#include <FactExtract/Parser/common/utilit.h>
 #include <FactExtract/Parser/common/toma_constants.h>
 #include <FactExtract/Parser/common/gramstr.h>
 
@@ -12,6 +11,8 @@
 #include <util/generic/stroka.h>
 #include <util/generic/set.h>
 #include <util/generic/vector.h>
+
+enum EBastardMode { No = 0, OutOfDict = 1, Always = 2 };
 
 const char g_strNameDic[100] = "name_thes.txt";
 const char g_strFragRes[100] = "fr_res.xml";
@@ -161,6 +162,8 @@ public:
     static bool s_bRunResignationAppointment;
     static bool s_bForceRecompile;
     static size_t s_maxFactsCount;
+
+    static EBastardMode s_BastardMode;
 
     static TOutputStream* s_PrintRulesStream;
     static TOutputStream* s_PrintGLRLogStream;

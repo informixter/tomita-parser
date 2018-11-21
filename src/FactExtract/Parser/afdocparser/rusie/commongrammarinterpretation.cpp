@@ -214,7 +214,7 @@ bool CCommonGrammarInterpretation::TryCutOutFactField(CFactSynGroup* pItem, cons
 
 void CCommonGrammarInterpretation::AddTextFactFieldValue(CTextWS& ws, const fact_field_descr_t fieldDescr) const
 {
-    if (!NStr::IsEqual(fieldDescr.m_StringValue, "$SENT"))
+    if (fieldDescr.m_StringValue != Wtroka::FromAscii("$SENT"))
         ws.AddLemma(SWordSequenceLemma(fieldDescr.m_StringValue));
     else
         ws.AddLemma(SWordSequenceLemma(m_Words.SentToString()));
@@ -1478,7 +1478,7 @@ Stroka CCommonGrammarInterpretation::GetAgreementStr(const SRuleExternalInformat
             if (kwtype.GetKWType() != NULL /*EKWTypeCount*/)
                 Result += kwtype.GetKWType()->name();
             else
-                Result += NStr::Encode(kwtype.GetStrType(), encoding);
+                Result += WideToChar(kwtype.GetStrType(), encoding);
             Result += " ";
         }
         Result += "] ";

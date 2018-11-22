@@ -1,4 +1,4 @@
-[![Travis](https://img.shields.io/travis/yandex/tomita-parser/master.svg?style=plastic)](https://travis-ci.org/yandex/tomita-parser)
+[![Travis](https://img.shields.io/travis/vbocharov/tomita-parser/master.svg?style=plastic)](https://travis-ci.org/vbocharov/tomita-parser)
 
 How to build?
 

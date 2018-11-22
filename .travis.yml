@@ -1,18 +1,32 @@
 language: c++
 sudo: false
-compiler:
-    - gcc
-install:
-    - export CXX="g++-4.8" CC="gcc-4.8"
-addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - cmake
-            - gcc-4.8
-            - g++-4.8
-            - lua5.2
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - CXX=g++-4.8
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - CXX=g++-7
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - CXX=g++-8
+
 before_script:
     - mkdir ${TRAVIS_BUILD_DIR}/build
     - cd ${TRAVIS_BUILD_DIR}/build

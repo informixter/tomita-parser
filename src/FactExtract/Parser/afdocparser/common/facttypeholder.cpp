@@ -22,6 +22,7 @@ EFactFieldType SelectFieldType(const NGzt::TProtoPool& pool, const NGzt::TFieldD
             if (pool.IsSameAsGeneratedType(fieldType, NFactType::TDate::descriptor()))
                 return DateField;
         }
+        /* Falls through. */
         default: return FactFieldTypesCount;     // skip such fields
     };
 }

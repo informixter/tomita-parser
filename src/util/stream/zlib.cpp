@@ -109,7 +109,7 @@ public:
                         ythrow TZLibDecompressorError() << "inflate reset error(" << GetErrMsg() << ")";
                     }
                 }
-
+                /* Falls through. */
                 case Z_OK: {
                     const size_t processed = size - Z()->avail_out;
 

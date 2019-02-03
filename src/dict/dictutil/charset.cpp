@@ -196,8 +196,9 @@ void TIconvCharset::Decode(
         case EINVAL:
             if (!endOfInput && bytesLeft < 4)
                 break;
-            /* no break */
+            /* Falls through. */
         case EILSEQ:
+            /* Falls through. */
         default:
             if (bytesLeft && charsLeft) {
                 --bytesLeft;

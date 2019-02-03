@@ -1,0 +1,15 @@
+encoding "utf8";
+
+import "base.proto";
+import "articles_base.proto";
+
+import "date_facttypes.proto";
+
+TAuxDicArticle "algdate" {
+  key = { "alg:quazefefweidate" type=CUSTOM }
+}
+
+TAuxDicArticle "grmdate"
+{
+  key = { "tomita:date_grm.cxx" type=CUSTOM }
+}

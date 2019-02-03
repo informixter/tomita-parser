@@ -1,0 +1,22 @@
+encoding "utf8";
+
+TTextMinerConfig {
+  Dictionary = "algorithms/fio_dic.gzt";
+
+  //PrettyOutput = "PrettyOutput.html";
+
+  Articles = [
+    { Name = "имя" },
+    { Name = "People" }
+  ]
+
+  Facts = [
+    { Name = "Person" }
+  ]
+
+  Output = {
+    Format = text;
+  }
+
+  //ForceRecompile=true;
+}

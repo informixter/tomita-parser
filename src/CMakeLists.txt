@@ -10,6 +10,10 @@ SET(ROOT_PROJECTS
         util
 )
 
+enable_testing()
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/../tests ${PROJECT_BINARY_DIR}/tests)
+
 IF (YMAKE)
     IF (ARC)
         ARCPLUGINS(

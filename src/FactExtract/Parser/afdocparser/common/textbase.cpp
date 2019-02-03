@@ -1557,15 +1557,18 @@ bool CTextBase::isDirectPartOfSpeechQuote(size_t& k)
 
     while (k < num && m_vecPrimGroup[k].isNZ())
         k++;
+
     if (k >= num)
         return true;
+
     if (!(isPunctComma(m_vecPrimGroup[k]) || isPunctSemicolon(m_vecPrimGroup[k]) || isPunctColon(m_vecPrimGroup[k])))
         return false;
 
-        k++;
+    k++;
 
     while (k < num && m_vecPrimGroup[k].isNZ())
         k++;
+
     if (k >= num)
         return true;
 

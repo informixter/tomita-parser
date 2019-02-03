@@ -221,18 +221,17 @@ bool TFileHandle::Close() throw () {
     if (Fd_ != INVALID_FHANDLE)
 #ifdef _win_
         isOk = (::CloseHandle(Fd_) != 0);
-        if (!isOk) {
-            VERIFY(GetLastError() != ERROR_INVALID_HANDLE,
-                    "must not quietly close invalid handle");
-        }
+    if (!isOk) {
+        VERIFY(GetLastError() != ERROR_INVALID_HANDLE, "must not quietly close invalid handle");
+    }
 #elif defined(_unix_)
         isOk = (::close(Fd_) == 0 || errno == EINTR);
-        if (!isOk) {
-            // Do not quietly close bad descriptor,
-            // because often it means double close
-            // that is disasterous
-            VERIFY(errno != EBADF, "must not quietly close bad descriptor: fd=%d", int(Fd_));
-        }
+    if (!isOk) {
+        // Do not quietly close bad descriptor,
+        // because often it means double close
+        // that is disasterous
+        VERIFY(errno != EBADF, "must not quietly close bad descriptor: fd=%d", int(Fd_));
+    }
 #else
 #       error unsupported platform
 #endif

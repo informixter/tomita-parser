@@ -154,8 +154,8 @@ int common_grammar(Stroka gram[], int size, char *outgram) {
             *outgram++ = (char)(gBefore + i);
             lengram++;
         }
-        *outgram++ = '\x00';
-        return lengram;
+    *outgram++ = '\x00';
+    return lengram;
 }
 
 // Singleton index of morphological info

@@ -935,7 +935,7 @@ GenerateStructors(io::Printer* printer) {
 
   printer->Print(
     "const $classname$& $classname$::default_instance() {\n"
-    "  if (default_instance_ == NULL) $adddescriptorsname$();"
+    "  if (default_instance_ == NULL) $adddescriptorsname$();\n"
     "  return *default_instance_;\n"
     "}\n"
     "\n"
@@ -1759,7 +1759,7 @@ GenerateIsInitialized(io::Printer* printer) {
   if (descriptor_->extension_range_count() > 0) {
     printer->Print(
       "\n"
-      "if (!_extensions_.IsInitialized()) return false;");
+      "if (!_extensions_.IsInitialized()) return false;\n");
   }
 
   printer->Outdent();

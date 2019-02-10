@@ -36,6 +36,8 @@
 #   endif
 #endif
 
+struct dirent *readdir_with_lock(DIR *dirp);
+
 int isdir(const char *path);
 
 bool IsDir(const Stroka& path);

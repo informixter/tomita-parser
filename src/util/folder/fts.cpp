@@ -37,6 +37,7 @@
 #include <util/system/compat.h>
 #include <util/memory/tempbuf.h>
 #include <util/system/error.h>
+#include <util/folder/dirut.h>
 
 #include <stdlib.h>
 #ifndef _win_
@@ -48,7 +49,6 @@
 #include <unistd.h>
 #else
 #include <direct.h>
-#include "dirent_win.h"
 #include "lstat_win.h"
 #endif
 
@@ -652,14 +652,6 @@ yfts_children(FTS * sp, int instr)
     return (sp->fts_child);
 }
 
-static inline struct dirent* yreaddir(DIR* dir, struct dirent* de) {
-    if (readdir_r(dir, de, &de) == 0) {
-        return de;
-    }
-
-    return 0;
-}
-
 /*
  * This is the tricky part -- do not casually change *anything* in here.  The
  * idea is to build the linked list of entries that are used by yfts_children
@@ -677,7 +669,6 @@ static inline struct dirent* yreaddir(DIR* dir, struct dirent* de) {
 static FTSENT *
 fts_build(FTS * sp, int type)
 {
-    struct dirent *dp;
     FTSENT *p, *head;
     int nitems;
     FTSENT *cur, *tail;
@@ -810,18 +801,17 @@ fts_build(FTS * sp, int type)
     /* Read the directory, attaching each entry to the `link' pointer. */
     doadjust = 0;
 
-    //to ensure enough buffer
-    TTempBuf dpe;
+    const dirent *pent = NULL;
 
-    for (head = tail = NULL, nitems = 0; dirp && (dp = yreaddir(dirp, (struct dirent*)dpe.Data())) != 0;) {
-        if (!ISSET(FTS_SEEDOT) && ISDOT(dp->d_name))
+    for (head = tail = NULL, nitems = 0; dirp && ((pent = readdir_with_lock(dirp)) != NULL);) {
+        if (!ISSET(FTS_SEEDOT) && ISDOT(pent->d_name))
             continue;
 
-        if ((p = fts_alloc(sp, dp->d_name, (int)strlen(dp->d_name))) == NULL)
+        if ((p = fts_alloc(sp, pent->d_name, (int)strlen(pent->d_name))) == NULL)
             goto mem1;
-        if (strlen(dp->d_name) >= (size_t)maxlen) {    /* include space for NUL */
+        if (strlen(pent->d_name) >= (size_t)maxlen) {    /* include space for NUL */
             oldaddr = sp->fts_path;
-            if (fts_palloc(sp, strlen(dp->d_name) +len + 1)) {
+            if (fts_palloc(sp, strlen(pent->d_name) +len + 1)) {
                 /*
                  * No more memory for path or structures.  Save
                  * errno, free up the current structure and the
@@ -849,7 +839,7 @@ mem1:                saved_errno = errno;
             maxlen = sp->fts_pathlen - len;
         }
 
-        if (len + strlen(dp->d_name) >= USHRT_MAX) {
+        if (len + strlen(pent->d_name) >= USHRT_MAX) {
             /*
              * In an FTSENT, fts_pathlen is a u_short so it is
              * possible to wraparound here.  If we do, free up
@@ -869,10 +859,10 @@ mem1:                saved_errno = errno;
         }
         p->fts_level = (short)level;
         p->fts_parent = sp->fts_cur;
-        p->fts_pathlen = u_short(len + strlen(dp->d_name));
+        p->fts_pathlen = u_short(len + strlen(pent->d_name));
 
 #ifdef FTS_WHITEOUT
-        if (dp->d_type == DT_WHT)
+        if (pent->d_type == DT_WHT)
             p->fts_flags |= FTS_ISW;
 #endif
 
@@ -886,7 +876,7 @@ mem1:                saved_errno = errno;
         } else if (nlinks == 0
 #ifdef DT_DIR
             || (nostat &&
-            dp->d_type != DT_DIR && dp->d_type != DT_UNKNOWN)
+            pent->d_type != DT_DIR && pent->d_type != DT_UNKNOWN)
 #endif
             ) {
             p->fts_accpath =

@@ -5,6 +5,7 @@
 #include <util/system/fs.h>
 #include <util/system/maxlen.h>
 #include <util/system/yassert.h>
+#include <util/system/spinlock.h>
 #include <util/generic/yexception.h>
 
 #ifdef _win32_
@@ -122,6 +123,15 @@ bool resolvepath(Stroka &folder, const Stroka &home)
     *(--s) = 0;
     folder = newpath;
     return true;
+}
+
+// readdir isn't thread-safe ( http://man7.org/linux/man-pages/man3/readdir.3.html )
+// readdir_r is deprecated
+struct dirent *readdir_with_lock(DIR *dirp) {
+    static TAtomic lock;
+    TGuard<TAtomic> guard(lock);
+
+    return readdir(dirp);
 }
 
 #else
@@ -503,7 +513,7 @@ int RemoveTempDir(const char* dirName) {
         return errno ? errno : ENOENT;
 
     int ret;
-    dirent ent, *pent;
+    dirent *pent = NULL;
     char path[FILENAME_MAX], *ptr;
     size_t len = strlcpy(path, dirName, FILENAME_MAX);
 
@@ -512,25 +522,29 @@ int RemoveTempDir(const char* dirName) {
         path[++len] = 0;
     }
     ptr = path + len;
-    while ((ret = readdir_r(dir, &ent, &pent)) == 0 && pent == &ent) {
-        if (!strcmp(ent.d_name, ".") || !strcmp(ent.d_name, ".."))
+    errno = 0;
+    while ((pent = readdir_with_lock(dir)) != NULL) {
+        errno = 0;
+        if (!strcmp(pent->d_name, ".") || !strcmp(pent->d_name, ".."))
             continue;
 #ifdef DT_DIR
-        if (ent.d_type == DT_DIR)
+        if (pent->d_type == DT_DIR)
 #else
-        lstat(ent.d_name, &sbp);
+        lstat(pent->d_name, &sbp);
         if (S_ISREG(sbp.st_mode))
 #endif
         {
             ret = ENOTEMPTY;
             break;
         }
-        strcpy(ptr, ent.d_name);
+        strcpy(ptr, pent->d_name);
         if (unlink(path)) {
             ret = errno ? errno : ENOENT;
             break;
         }
     }
+    if (errno != 0)
+       ret = errno;
     closedir(dir);
     if (ret)
         return ret;

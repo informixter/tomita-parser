@@ -1,4 +1,3 @@
-#include <util/system/mutex.h>
 #include <util/stream/file.h>
 #include <util/memory/blob.h>
 #include <util/system/oldfile.h>
@@ -307,16 +306,6 @@ void CDictsHolder::InitLemmaFreq()
     }
     fclose (fp);
 }
-
-//bool CDictsHolder::HasXmlLogFile() const
-//{
-//    return !GetXmlLogFile().empty();
-//}
-//
-//Stroka CDictsHolder::GetXmlLogFile() const
-//{
-//    return m_ParserOptions.m_KWDumpOptions.m_strXmlFileName;
-//}
 
 bool CDictsHolder::HasArtPointer(const CHomonym& h, EDicType dicType, const yset<SArtPointer>& artPointers) const
 {

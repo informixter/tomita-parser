@@ -2,7 +2,12 @@
 
 #include <util/memory/alloc.h>
 
-#include <stlport/list>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/list>
+#else
+    #include <list>
+    #define NStl std
+#endif
 
 template <class T, class A = DEFAULT_ALLOCATOR(T)>
 class ylist: public NStl::list<T, REBIND_ALLOCATOR(A, T)> {

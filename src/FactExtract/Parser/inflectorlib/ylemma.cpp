@@ -94,7 +94,7 @@ Stroka TYemmaInflector::DebugString() const {
 
 void TCollocation::AddDependency(size_t from, size_t to, const TGramBitSet& agreeTo,
                                  const TGramBitSet& enforceFrom, const TGramBitSet& enforceTo) {
-    Agreements.push_back();
+    Agreements.push_back(NInfl::TDependency());
     Agreements.back().From = from;
     Agreements.back().To = to;
     Agreements.back().AgreeTo = agreeTo;

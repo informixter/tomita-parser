@@ -4,9 +4,16 @@
 #include "mapfindptr.h"
 #include "pair.h"
 
-#include <stlport/numeric>
-#include <stlport/algorithm>
-#include <stlport/iterator>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/numeric>
+    #include <stlport/algorithm>
+    #include <stlport/iterator>
+#else
+    #include <numeric>
+    #include <algorithm>
+    #include <iterator>
+    #define NStl std
+#endif
 
 template <class T>
 static inline void QuickSort(T f, T l) {

@@ -31,7 +31,11 @@ public:
     }
 
     inline T* operator->() const {
+#ifdef USE_INTERNAL_STL
         return TBase::Cur;    // should be more efficient than &*IterCur (?)
+#else
+        return &*TBase::Cur;
+#endif
     }
 
     inline size_t Size() const {

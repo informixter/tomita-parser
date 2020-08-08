@@ -1,6 +1,11 @@
 #pragma once
 
-#include <stlport/limits>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/limits>
+#else
+    #include <limits>
+    #define NStl std
+#endif
 
 #if defined(max) || defined(min)
     #error "stop defining 'min' and 'max' macros, evil people"

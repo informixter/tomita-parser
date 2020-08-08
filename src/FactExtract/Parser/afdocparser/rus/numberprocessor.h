@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include <util/generic/vector.h>
 #include <util/generic/stroka.h>
 

@@ -10,9 +10,16 @@
 #include <util/str_stl.h>
 #include <util/generic/yexception.h>
 
-#include <stlport/memory>
-#include <stlport/algorithm>
-#include <stlport/functional>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/memory>
+    #include <stlport/algorithm>
+    #include <stlport/functional>
+#else
+    #include <memory>
+    #include <algorithm>
+    #include <functional>
+    #define NStl std
+#endif
 
 #include <cstdlib>
 
@@ -903,8 +910,8 @@ void yhashtable<V, K, HF, Ex, Eq, A>::basic_clear()
       return;
   }
 
-  node** first = buckets.begin();
-  node** last = buckets.end() - 1;
+  auto first = buckets.begin();
+  auto last = buckets.end() - 1;
   for (; first < last; ++first) {
     node* cur = *first;
     if (cur) { /*y*/

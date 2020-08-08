@@ -1,6 +1,6 @@
 
 #include "numberprocessor.h"
-#include <math.h>
+#include <cmath>
 #include <util/string/cast.h>
 
 const ui64 g_Exp1000[g_Exp1000Count] = {1000000000000ULL, 1000000000ULL, 1000000ULL, 1000ULL};

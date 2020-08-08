@@ -6,7 +6,12 @@
 #include <util/generic/yexception.h>
 #include <util/generic/algorithm.h>
 
-#include <stlport/iterator>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/iterator>
+#else
+    #include <iterator>
+    #define NStl std
+#endif
 
 class TDelimStrokaIter : public NStl::input_iterator<TStringBuf, int>
 {

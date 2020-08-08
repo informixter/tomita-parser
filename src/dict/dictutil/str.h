@@ -2,10 +2,10 @@
 
 #include "buf_ptr.h"
 #include "defs.h"
-#include "wcs.h"
 #include <util/charset/unidata.h>
 #include <util/generic/strbuf.h>
 #include <util/generic/vector.h>
+#include "wcs.h"
 
 class TCharSet;
 typedef TWtringBuf TWStringBuf;

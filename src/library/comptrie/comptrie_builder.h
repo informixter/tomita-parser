@@ -222,7 +222,11 @@ public:
 
     class TArcSet: public ISubtree, public TCompactVector<TArc> {
     public:
+#ifdef USE_INTERNAL_STL
         typedef typename yvector<TArc>::iterator iterator;
+#else
+        typedef typename TCompactVector<TArc>::iterator iterator;
+#endif
 
         iterator Find(char ch);
         void Add(const TBlob& s, TNode* node);

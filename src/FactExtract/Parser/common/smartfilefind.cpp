@@ -54,7 +54,7 @@ const TRegExMatch& CGlob::CachedRegEx(const TStringBuf& FilePattern)
 {
     typedef ymap<Stroka, TRegExMatch, TLess<TStringBuf> > TRegexCache;
     static TRegexCache cache;
-    TRegexCache::iterator item = cache.find(FilePattern);
+    TRegexCache::iterator item = cache.find(Stroka(FilePattern));
     if (item == cache.end()) {
         TRegExMatch match(CGlob::ShellPatternToRegex(FilePattern).c_str());
         TPair<TRegexCache::iterator, bool> tmp = cache.insert(MakePair(ToString(FilePattern), match));

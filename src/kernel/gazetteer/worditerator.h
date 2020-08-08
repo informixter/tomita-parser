@@ -45,6 +45,7 @@ public:
     {
     }
 
+#ifdef USE_INTERNAL_STL
     TStemFlexGramIterator(const TGramBitSet& stem_gram, const yvector<TGramBitSet>& flex_gram)
         : StemGram(&stem_gram), FlexGram(flex_gram)
     {
@@ -52,6 +53,18 @@ public:
             // when there is no @flex_gram, the iterator still will do a single iteration over @stem_gram
             FlexGram.Reset(StemGram, StemGram + 1);
     }
+#else
+    TStemFlexGramIterator(const TGramBitSet& stem_gram, const yvector<TGramBitSet>& flex_gram)
+        : StemGram(&stem_gram), FlexGram(flex_gram)
+    {
+        if (!FlexGram.Ok() && StemGram->any()) {
+            // when there is no @flex_gram, the iterator still will do a single iteration over @stem_gram
+            StemGramCopy.resize(1);
+            StemGramCopy[0] = stem_gram;
+            FlexGram.Reset(StemGramCopy);
+        }
+    }
+#endif
 
     inline bool Ok() const {
         return FlexGram.Ok();
@@ -70,7 +83,11 @@ public:
 
 private:
     const TGramBitSet* StemGram;
+
     NIter::TVectorIterator<const TGramBitSet> FlexGram;
+#ifndef USE_INTERNAL_STL
+    yvector<TGramBitSet> StemGramCopy;
+#endif
 };
 
 class TYandexLemmaGramIter {
@@ -80,6 +97,7 @@ public:
     {
     }
 
+#ifdef USE_INTERNAL_STL
     TYandexLemmaGramIter(const TYandexLemma& lemma)
         : StemGram(lemma.GetStemGram()), FlexGram(lemma.GetFlexGram(), lemma.FlexGramNum())
     {
@@ -96,20 +114,54 @@ public:
     inline void operator++() {
         ++FlexGram;
     }
+#else
+    TYandexLemmaGramIter(const TYandexLemma& lemma)
+        : StemGram(lemma.GetStemGram()),
+          FlexGramCur(lemma.GetFlexGram()),
+          FlexGramEnd(lemma.GetFlexGram() + lemma.FlexGramNum())
+    {
+        StemGramBitSet = TGramBitSet::FromBytes(StemGram);
+        // when there is no @FlexGram, the iterator still will do a single iteration over @StemGram
+        if (!Ok() && StemGramBitSet.any()) {
+            FlexGramCur = &StemGram;
+            FlexGramEnd = &StemGram + 1;
+        }
+    }
+
+    inline bool Ok() const {
+        return FlexGramCur != FlexGramEnd;
+    }
+
+    inline void operator++() {
+        ++FlexGramCur;
+    }
+#endif
 
     // return a COPY instead of ref
     typedef TGramBitSet TValueRef;
 
+#ifdef USE_INTERNAL_STL
     inline TGramBitSet operator*() const {
         return StemGramBitSet | TGramBitSet::FromBytes(*FlexGram);
     }
+#else
+    inline TGramBitSet operator*() const {
+        return StemGramBitSet | TGramBitSet::FromBytes(*FlexGramCur);
+    }
+#endif
 
 private:
     typedef const char* TGramStr;
 
     TGramStr StemGram;
     TGramBitSet StemGramBitSet;
+
+#ifdef USE_INTERNAL_STL
     NIter::TVectorIterator<const TGramStr> FlexGram;
+#else
+    const TGramStr* FlexGramCur;
+    const TGramStr* FlexGramEnd;
+#endif
 };
 
 typedef NIter::TValueIterator<const TWtringBuf> TDefaultExactFormIter;

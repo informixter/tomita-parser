@@ -1,10 +1,10 @@
-#include "wcs.h"
 #include "chars.h"
 
 #include <cstdlib>
 #include <string>
 #include <assert.h>
 #include <wctype.h>
+#include "wcs.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //

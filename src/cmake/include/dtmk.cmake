@@ -435,7 +435,7 @@ ELSE ()
 ENDIF ()
 
 DEFAULT(USE_ASMLIB no)
-DEFAULT(USE_INTERNAL_STL yes)
+DEFAULT(USE_INTERNAL_STL no)
 IF (NORUNTIME)
     SET(__saved_USE_INTERNAL_STL ${USE_INTERNAL_STL})
     SET(USE_INTERNAL_STL no)
@@ -449,6 +449,7 @@ IF (NOT PROJECTNAME STREQUAL "contrib-libs-stlport")
         PEERDIR(
             contrib/libs/stlport
         )
+        SET_APPEND(CXXFLAGS -DUSE_INTERNAL_STL)
     ELSE ()
         SET_APPEND(LDFLAGS -lstdc++)
     ENDIF ()

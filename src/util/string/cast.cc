@@ -1,4 +1,7 @@
-#define USE_INTERNAL_STRTOD
+#ifdef USE_INTERNAL_STL
+    #define USE_INTERNAL_STRTOD
+#endif
+
 #include <util/system/defaults.h>
 
 #if defined(_freebsd_) && !defined(__LONG_LONG_SUPPORTED)

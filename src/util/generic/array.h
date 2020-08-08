@@ -6,12 +6,16 @@
 
 #include <util/system/defaults.h>
 
-#include <stlport/new>
-
-#define _STLP_USE_NO_IOSTREAMS
-#include <stlport/iterator>
-#undef _STLP_USE_NO_IOSTREAMS
-#include <stlport/cstddef>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/new>
+    #define _STLP_USE_NO_IOSTREAMS
+    #include <stlport/iterator>
+    #undef _STLP_USE_NO_IOSTREAMS
+    #include <stlport/cstddef>
+#else
+    #include <new>
+    #define NStl std
+#endif
 
 namespace NTr1 {
     // Adopted from std::tr1::array

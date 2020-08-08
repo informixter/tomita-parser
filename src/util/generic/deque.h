@@ -2,7 +2,12 @@
 
 #include <util/memory/alloc.h>
 
-#include <stlport/deque>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/deque>
+#else
+    #include <deque>
+    #define NStl std
+#endif
 
 template <class T, class A = DEFAULT_ALLOCATOR(T)>
 class ydeque: public NStl::deque<T, REBIND_ALLOCATOR(A, T)> {

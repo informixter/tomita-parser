@@ -302,13 +302,13 @@ public:
     }
 
     static bool Has(const TWtringBuf& name) {
-        return Static()->NameIndex.find(name) != Static()->NameIndex.end();
+        return Static()->NameIndex.find(Wtroka(name)) != Static()->NameIndex.end();
     }
 
     static const size_t Invalid = static_cast<size_t>(-1);
 
     static size_t IndexOf(const TWtringBuf& name) {
-        TNameIndex::const_iterator it = Static()->NameIndex.find(name);
+        TNameIndex::const_iterator it = Static()->NameIndex.find(Wtroka(name));
         if (it != Static()->NameIndex.end())
             return it->second;
         else

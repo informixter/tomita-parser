@@ -784,7 +784,7 @@ void CGLRParser::ReduceOnePath(const yset<int>& Symbols, const CPendingReduction
 
     //  storing parse tree
     {
-        m_SymbolNodes[NewSymbolNode].m_ParseChildren.push_back();
+        m_SymbolNodes[NewSymbolNode].m_ParseChildren.push_back(CParsingChildrenSet());
         CParsingChildrenSet& S = m_SymbolNodes[NewSymbolNode].m_ParseChildren.back();
         S.m_ReduceRule = Reduction.m_pReduceRule;
         for (int i = Path.size() - 2; i > 0; i-=2)

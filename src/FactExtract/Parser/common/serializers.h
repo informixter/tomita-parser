@@ -68,11 +68,18 @@ public:
         ui32 sLen;
         ::Load(buffer, sLen);
 
+#ifdef USE_INTERNAL_STL
         std::string temp;
         temp.resize(sLen);
 
         ::LoadPodArray(buffer, temp.begin(), sLen);
         s.swap(temp);
+#else
+        char* p = new char[sLen];
+        ::LoadPodArray(buffer, p, sLen);
+        s = std::string(p, sLen);
+        delete[] p;
+#endif
     }
 };
 

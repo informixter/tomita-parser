@@ -37,7 +37,7 @@ bool TSurnamePredictor::Predict(const TWtringBuf& w, yvector<TPredictedSurname>&
     TGrammarBunch usedFlexGrammars;
     for (int i = Min<int>((int)w.length() - MinLemmaSize, MaxSurnameSuffixLength); i > 0; i--) {
         TWtringBuf Suffix = w.SubStr(w.size() - i);
-        TSurnameFlexMap::const_iterator it = SurnameFlex2Paradigmas.find(Suffix);
+        TSurnameFlexMap::const_iterator it = SurnameFlex2Paradigmas.find(Wtroka(Suffix));
 
         //храним те граммемы, которые мы уже приписывали, для того, чтобы когда мы предсказываем
         //по более короткому хвосту, не приписывать граммемы уже приписанного более длинного

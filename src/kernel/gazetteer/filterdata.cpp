@@ -143,7 +143,7 @@ void TFilter::Load(TInputStream* input) {
 
 TFilterStorageBuilder::TIndex TFilterStorageBuilder::PushBackSingle(const NAux::TFilter& item)
 {
-    FilterIndex[item.DataIndex].push_back();
+    FilterIndex[item.DataIndex].push_back(TArticle2Filter());
     TArticle2Filter& p = FilterIndex[item.DataIndex].back();
     p.ArticleId = item.ArticleId;
     p.Index = TBase::NextItemIndex();

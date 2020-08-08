@@ -2,7 +2,12 @@
 
 #include <util/system/defaults.h>
 
-#include <stlport/utility>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/utility>
+#else
+    #include <utility>
+    #define NStl std
+#endif
 
 template <class T1, class T2 = T1>
 struct TPair : NStl::pair<T1, T2> {

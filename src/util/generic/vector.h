@@ -2,7 +2,12 @@
 
 #include <util/memory/alloc.h>
 
-#include <stlport/vector>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/vector>
+#else
+    #include <vector>
+    #define NStl std
+#endif
 
 template <class T, class A = DEFAULT_ALLOCATOR(T)>
 class yvector: public NStl::vector<T, REBIND_ALLOCATOR(A, T)> {

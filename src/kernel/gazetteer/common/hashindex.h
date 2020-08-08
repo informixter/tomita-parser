@@ -303,7 +303,7 @@ public:
     size_t Add(T& item) {
         size_t idx = Size();
         if (!Uniq || Index.Insert(item, idx)) {
-            Storage.push_back();
+            Storage.push_back(T());
             ::DoSwap(Storage.back(), item);
         }
         return idx;

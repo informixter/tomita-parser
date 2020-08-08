@@ -1,6 +1,8 @@
 #pragma once
 
-#include <stlport/memory>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/memory>
+#endif
 
 #include <cstdlib>
 

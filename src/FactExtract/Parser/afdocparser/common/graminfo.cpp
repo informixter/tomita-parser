@@ -115,12 +115,12 @@ private:
 
 public:
     static const SNumeral2Number* FindByCardinal(const TWtringBuf& cardinal) {
-        TIndex::const_iterator it = Static()->CardinalIndex.find(cardinal);
+        TIndex::const_iterator it = Static()->CardinalIndex.find(Wtroka(cardinal));
         return (it != Static()->CardinalIndex.end()) ? &(Static()->List[it->second]) : NULL;
     }
 
     static const SNumeral2Number* FindByOrdinal(const TWtringBuf& ordinal) {
-        TIndex::const_iterator it = Static()->OrdinalIndex.find(ordinal);
+        TIndex::const_iterator it = Static()->OrdinalIndex.find(Wtroka(ordinal));
         return (it != Static()->OrdinalIndex.end()) ? &(Static()->List[it->second]) : NULL;
     }
 };

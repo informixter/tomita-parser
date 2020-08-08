@@ -7,7 +7,12 @@
 #include <util/generic/strbuf.h>
 #include <util/charset/codepage.h>
 
-#include <stlport/functional>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/functional>
+#else
+    #include <functional>
+    #define NStl std
+#endif
 
 namespace NStl {
     template <>

@@ -14,9 +14,16 @@
 #include <util/memory/blob.h>
 #include <util/draft/variant.h>
 
-#include <stlport/list>
-#include <stlport/string>
-#include <stlport/bitset>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/list>
+    #include <stlport/string>
+    #include <stlport/bitset>
+#else
+    #include <list>
+    #include <string>
+    #include <bitset>
+    #define NStl std
+#endif
 
 #define CStructureSaver IBinSaver
 
@@ -27,18 +34,16 @@
 #define ZSKIP
 #define ZONSERIALIZE
 
-
 #ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 
-//template <class T> class TArray2D;
 template<int n> struct SInt2Type {};
 
 enum ESaverMode
 {
-    SAVER_MODE_READ        = 1,
-    SAVER_MODE_WRITE    = 2,
+    SAVER_MODE_READ             = 1,
+    SAVER_MODE_WRITE            = 2,
     SAVER_MODE_WRITE_COMPRESSED = 3,
 };
 
@@ -183,9 +188,18 @@ private:
         if (bRead) {
             int nCount = 0;
             File.Read(&nCount, sizeof(int));
+#ifdef USE_INTERNAL_STL
             data.resize(nCount);
             if (nCount)
                 File.Read(data.begin(), nCount * elemSize);
+#else
+            if (nCount) {
+                typename TStringType::value_type* buffer = new typename TStringType::value_type[nCount];
+                File.Read((void*)buffer, nCount * elemSize);
+                data = TStringType(buffer, nCount);
+                delete[] buffer;
+            }
+#endif
         } else {
             int nCount = (int)data.size();
             File.Write(&nCount, sizeof(int));

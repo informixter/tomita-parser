@@ -105,7 +105,7 @@ namespace NBuiltin {
     }
 
     TRef TFileCollection::FindExplicit(const TStringBuf& name) const {
-        ymap<Stroka, TRef>::const_iterator it = Index.find(name);
+        ymap<Stroka, TRef>::const_iterator it = Index.find(Stroka(name));
         return it != Index.end() ? it->second : NULL;
     }
 

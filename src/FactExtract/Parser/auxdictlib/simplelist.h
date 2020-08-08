@@ -104,7 +104,7 @@ inline void fill_str_vector_and_free(yvector< yvector<Wtroka> >& res, simple_lis
 {
     res.clear();
     for (const simple_list< yvector<Stroka> >* tmp = head; tmp != NULL; tmp = tmp->next) {
-        res.push_back();
+        res.push_back(yvector<Wtroka>());
         yvector<Wtroka>& vec = res.back();
         for (size_t i = 0; i < tmp->info.size(); ++i)
             vec.push_back(NStr::DecodeAuxDic(tmp->info[i]));

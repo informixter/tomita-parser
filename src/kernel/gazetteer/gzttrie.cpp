@@ -122,7 +122,7 @@ void TGztTrieBuilder::SplitKeyToWords(const TStrBuf& key, const TOptions& option
         TStrBuf word = text.NextTok(SPACE);
         text = StripString(text);
         if (!word.empty()) {
-            Current->Words.push_back();
+            Current->Words.push_back(TKeyWordInfo());
             Current->Words.back().OriginalText = word;
             if (options.GztOptions.GetWildCards().GetAnyWord() && IsAnyWord(word))
                 Current->Words.back().IsAnyWord = true;

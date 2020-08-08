@@ -6,7 +6,12 @@
 
 #include <util/str_stl.h>
 
-#include <stlport/queue>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/queue>
+#else
+    #include <queue>
+    #define NStl std
+#endif
 
 template <class T, class S = ydeque<T> >
 class yqueue: public NStl::queue<T, S> {

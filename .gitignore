@@ -14,3 +14,5 @@ src/contrib/tools/protoc/protoc
 src/library/archive/archive
 src/library/pire/pire
 src/library/xsltransform/xsltransform
+
+*.sw?

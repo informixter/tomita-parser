@@ -689,7 +689,7 @@ private:
     }
 
     bool FindRegisteredNoLock(const TStringBuf& normPath, T*& res) const {
-        typename TIndex::const_iterator it = Index.find(normPath);
+        typename TIndex::const_iterator it = Index.find(Stroka(normPath));
         if (it != Index.end()) {
             res = it->second;
             return true;

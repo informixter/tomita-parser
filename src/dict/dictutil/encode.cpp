@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "dictutil.h"
 #include "chars.h"
 #include "charset.h"

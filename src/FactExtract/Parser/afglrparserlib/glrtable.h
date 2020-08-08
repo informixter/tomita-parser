@@ -48,7 +48,13 @@ struct CSLRCell
 {
     bool m_bShift;
     int m_GotoLine;
+
+#ifdef USE_INTERNAL_STL
     yvector<const CGLRRuleInfo*> m_ReduceRules;
+#else
+    typedef yvector<CGLRRuleInfo>::const_iterator rule_info_const_iterator_t;
+    yvector<rule_info_const_iterator_t> m_ReduceRules;
+#endif
 
     CSLRCell()
         : m_bShift(false)
@@ -177,7 +183,17 @@ public:
     }
 
     bool BuildGLRTable(Stroka GrammarFileName = "");
-    const CGLRRuleInfo* GetRuleInfo (const CWorkRule*) const;
+#ifdef USE_INTERNAL_STL
+    const CGLRRuleInfo* GetRuleInfo(const CWorkRule*) const;
+#else
+    typedef CSLRCell::rule_info_const_iterator_t rule_info_const_iterator_t;
+
+    rule_info_const_iterator_t GetRuleInfo(const CWorkRule*) const;
+    inline rule_info_const_iterator_t GetSimpleCellRuleIter(ui32 encodedCell) const {
+        YASSERT(IsSimpleCell(encodedCell));
+        return GetRuleIterByIndex(DecodeIndex(encodedCell));
+    }
+#endif
     void SwapRuleAgreements(yvector<CRuleAgreement>& agreements);
 
     void Save(TOutputStream* buffer) const;
@@ -237,7 +253,14 @@ public:
 private:
     void Compact(const yvector< yvector<CSLRCell> >& table);
     bool Verify(const yvector< yvector<CSLRCell> >& table) const;
+#ifdef USE_INTERNAL_STL
     ui32 GetRuleIndex(const CGLRRuleInfo* rule) const;
+#else
+    ui32 GetRuleIndex(const rule_info_const_iterator_t& rule_it) const;
+    inline rule_info_const_iterator_t GetRuleIterByIndex(ui32 index) const {
+        return m_RuleInfos.begin() + index;
+    }
+#endif
 
     const CGLRRuleInfo& GetRuleByIndex(ui32 index) const {
         return m_RuleInfos[index];

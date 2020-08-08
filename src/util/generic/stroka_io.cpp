@@ -2,7 +2,12 @@
 
 #include <util/fput.h>
 
-#include <stlport/iostream>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/iostream>
+#else
+    #include <iostream>
+    #define NStl std
+#endif
 
 #include <cctype>
 

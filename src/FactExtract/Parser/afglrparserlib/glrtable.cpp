@@ -28,21 +28,29 @@ void CGLRRuleInfo::Load(TInputStream* buffer)
 
 /*--------------------------------class CGLRTable------------------------------------------*/
 
+#ifdef USE_INTERNAL_STL
 const CGLRRuleInfo* CGLRTable::GetRuleInfo (const CWorkRule* R) const
+#else
+CGLRTable::rule_info_const_iterator_t CGLRTable::GetRuleInfo (const CWorkRule* R) const
+#endif
 {
     CGLRRuleInfo I;
     I.m_OriginalRuleNo = R->m_OriginalRuleNo;
     yvector<CGLRRuleInfo>::const_iterator it = std::lower_bound(m_RuleInfos.begin(), m_RuleInfos.end(), I);
     YASSERT(it != m_RuleInfos.end());
     YASSERT(it->m_OriginalRuleNo == R->m_OriginalRuleNo);
+#ifdef USE_INTERNAL_STL
     return &*it;
+#else
+    return it;
+#endif
 }
 
 static void BuildRuleInfo(const yset<CWorkRule>& rules, yvector<CGLRRuleInfo>& res)
 {
     res.clear();
     for (yset<CWorkRule>::const_iterator it = rules.begin(); it != rules.end(); ++it) {
-        res.push_back();
+        res.push_back(CGLRRuleInfo());
         res.back().Init(&*it);
     }
     std::sort(res.begin(), res.end());
@@ -163,8 +171,13 @@ static inline void CheckIndexOverflow(size_t index) {
         ythrow yexception() << "GLR-Table compacting: maximum index reached (" << index << ").";
 }
 
+#ifdef USE_INTERNAL_STL
 inline ui32 CGLRTable::GetRuleIndex(const CGLRRuleInfo* rule) const {
     size_t index = rule - m_RuleInfos.begin();
+#else
+inline ui32 CGLRTable::GetRuleIndex(const rule_info_const_iterator_t& rule_it) const {
+    size_t index = rule_it - m_RuleInfos.begin();
+#endif
     CheckIndexOverflow(index);
     return index;
 }
@@ -192,17 +205,25 @@ void CGLRTable::Compact(const yvector< yvector<CSLRCell> >& table)
             size_t index = row*Columns + column;
             Mask[index >> 3] |= 1 << (index & 7);
             if (cell.m_ReduceRules.size() == 1 && !cell.m_bShift && cell.m_GotoLine == -1)
-                // lowest bit 0 means the rest value is already rule index (without encoding in RuleIndexStorage)
-                //SimpleCells.push_back(MakePair(MakePair(row, column), GetRuleIndex(cell.m_ReduceRules[0]) << 1));
+                // lowest bit 0 means the rest value is already rule index
+                // (without encoding in RuleIndexStorage)
+#ifdef USE_INTERNAL_STL
                 SimpleCells.Add(row, column, GetRuleIndex(cell.m_ReduceRules[0]) << 1);
+#else
+                SimpleCells.Add(row, column, GetRuleIndex(*cell.m_ReduceRules.begin()) << 1);
+#endif
             else {
                 tmp.clear();
+#ifdef USE_INTERNAL_STL
                 for (size_t i = 0; i < cell.m_ReduceRules.size(); ++i)
                     tmp.push_back(GetRuleIndex(cell.m_ReduceRules[i]));
+#else
+                for (auto it = cell.m_ReduceRules.begin(); it != cell.m_ReduceRules.end(); ++it)
+                    tmp.push_back(GetRuleIndex(*it));
+#endif
                 ui32 rulesIndex = ruleIndexStorageBuilder.AddRange(tmp.begin(), tmp.end());
 
                 // lowest bit 1 means the rest value is already rule index
-                //SimpleCells.push_back(MakePair(MakePair(row, column), (ComplexCells.size() << 1) + 1));    // overflow check will be done later
                 SimpleCells.Add(row, column, (ComplexCells.size() << 1) + 1);
                 ComplexCells.push_back(TCompactSLRCell(cell.m_bShift, cell.m_GotoLine, rulesIndex));
             }
@@ -221,7 +242,11 @@ void CGLRTable::Compact(const yvector< yvector<CSLRCell> >& table)
 
 bool CGLRTable::Verify(const yvector< yvector<CSLRCell> >& table) const {
 
+#ifdef USE_INTERNAL_STL
     yset<const CGLRRuleInfo*> rules1, rules2;
+#else
+    yset<rule_info_const_iterator_t> rules1, rules2;
+#endif
     for (size_t row = 0; row < Rows; ++row)
         for (size_t column = 0; column < Columns; ++column) {
             const CSLRCell& cell = table[row][column];
@@ -233,7 +258,11 @@ bool CGLRTable::Verify(const yvector< yvector<CSLRCell> >& table) const {
                 YASSERT(cell.m_bShift == false);
                 YASSERT(cell.m_GotoLine == -1);
                 YASSERT(cell.m_ReduceRules.size() == 1);
+#ifdef USE_INTERNAL_STL
                 YASSERT(&GetSimpleCellRule(encoded) == cell.m_ReduceRules[0]);
+#else
+                YASSERT(GetSimpleCellRuleIter(encoded) == *cell.m_ReduceRules.begin());
+#endif
             } else {
                 ui32 gotoLine;
                 if (GetGotoLine(encoded, gotoLine))
@@ -244,8 +273,15 @@ bool CGLRTable::Verify(const yvector< yvector<CSLRCell> >& table) const {
 
                 // compare reduce rules without ordering
                 rules1.clear();
+#ifdef USE_INTERNAL_STL
                 for (TRuleIter ruleIter = IterComplexCellRules(encoded); ruleIter.Ok(); ++ruleIter)
                     rules1.insert(&*ruleIter);
+#else
+                YASSERT(!IsSimpleCell(encoded));
+                const TCompactSLRCell& complex = ComplexCells[DecodeIndex(encoded)];
+                for (TRuleIndexIter i = RuleIndexStorage[complex.GetRulesIndex()]; i.Ok(); ++i)
+                    rules1.insert(GetRuleIterByIndex(*i));
+#endif
                 rules2.clear();
                 rules2.insert(cell.m_ReduceRules.begin(), cell.m_ReduceRules.end());
                 YASSERT(rules1 == rules2);

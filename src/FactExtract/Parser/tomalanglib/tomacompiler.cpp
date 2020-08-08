@@ -409,7 +409,7 @@ TRuleIndex::TRuleIndex(NTomita::TFileProto& file)
             ExplicitRoot = id;
 
         Left.push_back(id);
-        Right.push_back();
+        Right.push_back(yvector<TNameId>());
         for (size_t j = 0; j < rule.ItemSize(); ++j) {
             const Stroka& itemName = rule.GetItem(j).GetTerm().GetName();
             Right.back().push_back(AddName(itemName));
@@ -936,7 +936,7 @@ TRuleGroups::TRuleGroups(const NTomita::TFileProto& file)
         Stroka dump = TTomitaCompiler::PrintRule(*rule, 0);
         TPair<ymap<Stroka, size_t>::iterator, bool> ins = index.insert(MakePair(dump, Groups.size()));
         if (ins.second) {
-            Groups.push_back();
+            Groups.push_back(TGroup());
             Groups.back().first = rule;
         } else
             Groups[ins.first->second].second.push_back(rule);
@@ -1031,17 +1031,17 @@ static void ConvertToParseRules(const TRuleGroups& srcRuleGroups, CParseGrammar*
     for (size_t g = 0; g < srcRuleGroups.Size(); ++g) {
         const NTomita::TRuleProto& src = *srcRuleGroups.GetFirstRule(g);
 
-        dstRules->m_Rules.push_back();
+        dstRules->m_Rules.push_back(CParseRule());
         CParseRule* dst = &dstRules->m_Rules.back();
 
         dst->m_LeftPart.m_ItemStrId = src.GetName();
         dst->m_LeftPart.m_Source = src.GetName();     // wtf?
         dst->m_LeftPart.m_Type = siMeta;              // wtf?
 
-        dst->m_RightParts.push_back();
+        dst->m_RightParts.push_back(CParseLeftPart());
         CParseLeftPart& rightPart = dst->m_RightParts.back();
         for (size_t j = 0; j < src.ItemSize(); ++j) {
-            rightPart.push_back();
+            rightPart.push_back(CGrammarItem());
             ConvertToGrammarItem(src.GetItem(j).GetTerm(), &rightPart.back(), false, src.GetItem(j).GetReplace());     // not a filter
         }
         rightPart.m_SourceLineNo = src.GetLocation().GetLine() + 1;
@@ -1070,7 +1070,7 @@ static void ConvertToParseFilter(const NTomita::TFileProto& file, CWorkGrammar* 
         }
         yvector< yvector<CFilterPair> >& filterSet = dst->m_FilterStore.m_FilterSet;
         if (dstFilters.size() > 0 && std::find(filterSet.begin(), filterSet.end(), dstFilters) == filterSet.end()) {
-            filterSet.push_back();
+            filterSet.push_back(yvector<CFilterPair>());
             filterSet.back().swap(dstFilters);
         }
     }
@@ -1089,7 +1089,7 @@ static void ConvertReduceAgrInfo(const NTomita::TRuleProto& rule, SRuleExternalI
             TPair<ymap<ui32, size_t>::iterator, bool> ins = index.insert(MakePair(tagr.GetId(), tmpArgs.size()));
             if (ins.second) {
                 // new id, create new rule agr:
-                tmpArgs.push_back();
+                tmpArgs.push_back(SAgr());
                 SAgr& agr = tmpArgs.back();
                 agr.m_bNegativeAgreement = tagr.GetNegative();
                 switch (tagr.GetType()) {
@@ -1117,7 +1117,7 @@ static void ConvertReduceAgrInfo(const NTomita::TRuleProto& rule, SRuleExternalI
     // during kleene operators removing.
     for (size_t i = 0; i < tmpArgs.size(); ++i) {
         if (tmpArgs[i].m_AgreeItems.size() == 2) {
-            info->m_RulesAgrs.push_back();
+            info->m_RulesAgrs.push_back(SAgr());
             SAgr& agr = info->m_RulesAgrs.back();
             agr.m_bNegativeAgreement = tmpArgs[i].m_bNegativeAgreement;
             agr.e_AgrProcedure = tmpArgs[i].e_AgrProcedure;
@@ -1129,7 +1129,7 @@ static void ConvertReduceAgrInfo(const NTomita::TRuleProto& rule, SRuleExternalI
     for (size_t i = 0; i < rule.ItemSize(); ++i) {
         const NTomita::TPostfixProto& postfix = rule.GetItem(i).GetTerm().GetPostfix();
         if (postfix.GetLeftQuoted() != NTomita::TPostfixProto::UNDEF) {
-            info->m_RulesAgrs.push_back();
+            info->m_RulesAgrs.push_back(SAgr());
             SAgr& agr = info->m_RulesAgrs.back();
             agr.m_bNegativeAgreement = (postfix.GetLeftQuoted() == NTomita::TPostfixProto::DENY);
             agr.m_AgreeItems.push_back(i);
@@ -1140,7 +1140,7 @@ static void ConvertReduceAgrInfo(const NTomita::TRuleProto& rule, SRuleExternalI
                 agr.e_AgrProcedure = CheckLQuoted;
         }
         if (postfix.GetRightQuoted() != NTomita::TPostfixProto::UNDEF) {
-            info->m_RulesAgrs.push_back();
+            info->m_RulesAgrs.push_back(SAgr());
             SAgr& agr = info->m_RulesAgrs.back();
             agr.m_bNegativeAgreement = (postfix.GetRightQuoted() == NTomita::TPostfixProto::DENY);
             agr.m_AgreeItems.push_back(i);
@@ -1237,7 +1237,7 @@ static void ConvertTermReduceInfo(const NTomita::TRuleItemProto& item, size_t in
     // LoadRuleFactFieldInterpretation(r_term, iItem);
     for (size_t i = 0; i < item.InterpSize(); ++i) {
         yvector<fact_field_reference_t>& interps = info->m_FactsInterpretation[index];
-        interps.push_back();
+        interps.push_back(fact_field_reference_t());
         ConvertToFactInterp(item.GetInterp(i), &interps.back(), factTypes);
     }
 
@@ -1283,7 +1283,7 @@ static void ConvertRuleOutInfo(const NTomita::TRuleInfoProto& src, SExtraRuleInf
 static void ConvertRuleReduceInfo(const NTomita::TRuleProto& rule, CRuleAgreement& info,
                                   const IArticleNames* kwtypes, const IFactTypeDictionary* factTypes)
 {
-    info.push_back();
+    info.push_back(SRuleExternalInformationAndAgreements());
     SRuleExternalInformationAndAgreements& item = info.back();
     ConvertReduceAgrInfo(rule, &item);
     for (size_t j = 0; j < rule.ItemSize(); ++j)
@@ -1295,7 +1295,7 @@ static void ConvertReduceInfo(const TRuleGroups& groups, yvector<CRuleAgreement>
                               const IArticleNames* kwtypes, const IFactTypeDictionary* factTypes)
 {
     for (size_t i = 0; i < groups.Size(); ++i) {
-        info.push_back();
+        info.push_back(CRuleAgreement());
         ConvertRuleReduceInfo(*groups.GetFirstRule(i), info.back(), kwtypes, factTypes);
         const yvector<const NTomita::TRuleProto*>& similar = groups.GetSimilarRules(i);
         for (size_t j = 0; j < similar.size(); ++j)

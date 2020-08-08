@@ -327,6 +327,24 @@ template <class T, class A>
 class TSerializer< yvector<T, A> >: public TVectorSerializer< yvector<T, A> > {
 };
 
+#ifndef USE_INTERNAL_STL
+template <>
+class TSerializer< yvector<bool> >: public TVectorSerializer< yvector<bool> > {
+    public:
+        static inline void Save(TOutputStream* rh, const yvector<bool>& v) {
+            ::SaveSize(rh, +v);
+            // TODO
+            ythrow yexception() << "void TSerializer< yvector<bool> >::Save(TOutputStream* rh, const yvector<bool>& v) isn't implemented";
+        }
+
+        static inline void Load(TInputStream* rh, yvector<bool>& v) {
+            ::LoadSizeAndResize(rh, v);
+            // TODO
+            ythrow yexception() << "void TSerializer< yvector<bool> >::Load(TOutputStream* rh, yvector<bool>& v) isn't implemented";
+        }
+};
+#endif
+
 template <>
 class TSerializer<Stroka>: public TVectorSerializer<Stroka> {
 };

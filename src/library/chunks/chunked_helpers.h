@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
 
 #include <util/generic/static_assert.h>
 #include <util/generic/vector.h>

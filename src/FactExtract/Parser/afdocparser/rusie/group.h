@@ -79,21 +79,45 @@ public:
 
     typedef ui32 THomMask;
     struct TChildHomonyms {
+#ifdef USE_INTERNAL_STL
         const THomMask* Start;
         const THomMask* Stop;
+#else
+        typedef yvector<THomMask>::const_iterator hommask_const_iterator_t;
+        hommask_const_iterator_t Start;
+        hommask_const_iterator_t Stop;
+        yvector<THomMask> InternalVector;
+#endif
 
+#ifdef USE_INTERNAL_STL
         TChildHomonyms(const THomMask* start, const THomMask* stop)
+#else
+        TChildHomonyms(hommask_const_iterator_t start, hommask_const_iterator_t stop)
+#endif
             : Start(start)
             , Stop(stop)
         {
             YASSERT(start <= stop);
         }
 
+#ifdef USE_INTERNAL_STL
         explicit TChildHomonyms(const THomMask* singleHom)
             : Start(singleHom)
             , Stop(singleHom + 1)
         {
         }
+#else
+        explicit TChildHomonyms(const THomMask* singleHom)
+            : InternalVector(1, *singleHom)
+        {
+            Start = InternalVector.begin();
+            Stop = InternalVector.end();
+            // WARNING: the behavior is different between
+            // USE_INTERNAL_STL=yes and USE_INTERNAL_STL=no versions.
+            // The version without internal STL copies value
+            // referenced by singleHom into InternalVector.
+        }
+#endif
 
         explicit TChildHomonyms(const yvector<THomMask>& homs)
             : Start(homs.begin())
@@ -118,7 +142,6 @@ public:
         }
     };
 
-
     virtual TChildHomonyms GetChildHomonyms() const = 0;
     inline THomMask GetChildHomonym(size_t i) const {
         return GetChildHomonyms()[i];
@@ -129,12 +152,8 @@ public:
         IntersectChildHomonyms(group.GetChildHomonyms());
     }
 
-
     virtual ui32 GetMainHomIDs() const = 0;
     virtual void GetMainClauseWord(int&, int&) const = 0;
-
-//    virtual int GetChildHomonymsCount() const = 0;
-
 
     inline TWeight GetUserWeight() const {
         return UserWeight;
@@ -149,7 +168,6 @@ public:
         if (group != NULL)
             AddUserWeight(group->GetUserWeight());
     }
-
 
     // debugging info
     void SetRuleName(const Stroka& name) {

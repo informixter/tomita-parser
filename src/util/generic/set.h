@@ -3,7 +3,12 @@
 #include <util/memory/alloc.h>
 #include <util/str_stl.h>
 
-#include <stlport/set>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/set>
+#else
+    #include <set>
+    #define NStl std
+#endif
 
 template <class K, class L = TLess<K>, class A = DEFAULT_ALLOCATOR(K)>
 class yset: public NStl::set<K, L, REBIND_ALLOCATOR(A, K)> {

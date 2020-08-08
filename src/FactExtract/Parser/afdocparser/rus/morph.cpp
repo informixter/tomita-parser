@@ -373,7 +373,7 @@ bool TMorph::GetHomonyms(const Wtroka& word, THomonymBaseVector& dict_homs, bool
          else
              dict_homs.push_back(pH);
     }
-  
+
     if (Singleton<TMorph>()->GramInfo->s_BastardMode == EBastardMode::Always ||
         (Singleton<TMorph>()->GramInfo->s_BastardMode == EBastardMode::OutOfDict && dict_homs.size() == 0)) {
         dict_homs.insert(dict_homs.end(), predicted_homs.begin(), predicted_homs.end());
@@ -639,7 +639,7 @@ bool TMorph::GetAllFormsOfLemma(const Wtroka& lemma, yvector< TPair<Wtroka, TGra
             forms.clear();
             GenerateWordForms(lemmas[i], forms);
             for (size_t i = 0; i < forms.size(); ++i) {
-                res.push_back();
+                res.push_back(TPair<Wtroka, yset<TGramBitSet>>());
                 res.back().first = forms[i].GetText();
                 ToNormalizedGrammarBunch(forms[i], res.back().second);
             }
@@ -806,7 +806,7 @@ const TGrammarBunch* TMorph::GetNumeralGrammemsByFlex(const TWtringBuf& numeral,
         return NULL;
 
     TWtringBuf flex = s.SubStr(s.size() - Min<int>(4, s.size()));
-    TNumberFlex2GrammemsMap::const_iterator it = morph->m_NumberFlex2Grammems[map_index].find(flex);
+    TNumberFlex2GrammemsMap::const_iterator it = morph->m_NumberFlex2Grammems[map_index].find(Wtroka(flex));
     if (it != morph->m_NumberFlex2Grammems[map_index].end())
         return &(it->second);
     else

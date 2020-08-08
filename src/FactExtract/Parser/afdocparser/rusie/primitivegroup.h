@@ -68,7 +68,7 @@ public:
 
     virtual TChildHomonyms GetChildHomonyms() const {
         //YASSERT(m_ActiveHomonyms != 0);
-        return TChildHomonyms(&m_ActiveHomonyms, &m_ActiveHomonyms + 1);
+        return TChildHomonyms(&m_ActiveHomonyms);
     }
 
     virtual Stroka DebugString() const;

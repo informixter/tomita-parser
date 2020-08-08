@@ -1,10 +1,10 @@
 #pragma once
 
 #include "defs.h"
-#include "wcs.h"
 #include <util/charset/doccodes.h>
 #include <util/generic/strbuf.h>
 #include <util/generic/vector.h>
+#include "wcs.h"
 
 struct CodePage;
 class TLangIDs;

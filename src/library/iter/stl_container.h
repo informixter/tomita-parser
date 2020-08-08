@@ -13,7 +13,6 @@ template <class TContainer>
 class TStlContainerTypeTraits {
     typedef typename TContainer::value_type TValueType;
     typedef typename TTypeTraits<TContainer>::TNonConst TNonConstContainer;
-    //typedef typename TNonConstContainer<TNonConstValueType> TBaseContainer;
 
 public:
     typedef typename TTypeTraits<TValueType>::TNonConst TNonConstValueType;
@@ -27,8 +26,6 @@ public:
 public:
     typedef typename TSelectType<IsConst, TConstValueType, TNonConstValueType >::TResult TValue;
     typedef typename TSelectType<IsConst, TConstIter, TNonConstIter >::TResult TIterator;
-
-    //typedef typename TSelectType<IsConst, const TBaseContainer, TBaseContainer>::TResult TDefaultContainer;
 };
 
 template <class T>

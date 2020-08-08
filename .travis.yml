@@ -2,6 +2,9 @@ language: c++
 sudo: false
 
 matrix:
+  internal_stl:
+    - USE_INTERNAL_STL=yes
+    - USE_INTERNAL_STL=no
   include:
     - compiler: gcc
       addons:
@@ -54,7 +57,7 @@ before_script:
     - mkdir ${TRAVIS_BUILD_DIR}/build
     - cd ${TRAVIS_BUILD_DIR}/build
 script:
-    - cmake -DCMAKE_BUILD_TYPE=Release ${TRAVIS_BUILD_DIR}/src
+    - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_INTERNAL_STL=${USE_INTERNAL_STL} ${TRAVIS_BUILD_DIR}/src
     - cmake --build .
     - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
     - unzip libmystem_c_binding.so.linux_x64.zip

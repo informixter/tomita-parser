@@ -38,7 +38,7 @@
 //  Sanjay Ghemawat, Jeff Dean, and others.
 
 #include <float.h>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 #include <stack>
 #include <limits>

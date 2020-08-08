@@ -71,7 +71,7 @@ class TWordRusHomonymIterator
 {
 public:
     inline TWordRusHomonymIterator()
-        : CurrentHomonym(NULL)
+        : CurrentHomonym(nullptr)
         , Hyphenable(false)
         , HyphenChecked(false)
         , PredictedIndex(0)
@@ -79,7 +79,7 @@ public:
     }
 
     inline TWordRusHomonymIterator(const CWord& word)
-        : CurrentHomonym(NULL)
+        : CurrentHomonym(nullptr)
         , HomIt(word.IterHomonyms())
         , Hyphenable(word.m_typ == Hyphen && !word.m_bUp)
         , HyphenChecked(false)
@@ -89,7 +89,13 @@ public:
         if (HomIt.Ok())
             SetCurrent(&*HomIt);
         else if (PredictedHomonyms.Ok())
+#ifdef USE_INTERNAL_STL
             SetCurrent(PredictedHomonyms->Get());
+#else
+        {
+            SetCurrent(&*(PredictedHomonyms->Get()));
+        }
+#endif
     }
 
     inline bool Ok() const

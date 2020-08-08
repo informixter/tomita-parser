@@ -83,7 +83,7 @@ public:
     }
 
     const TGrammarBunch* Recognize(const TWtringBuf& flexion) const {
-        TFlexMap::const_iterator form = Forms.find(flexion.Last(MaxFlexLen));
+        TFlexMap::const_iterator form = Forms.find(Wtroka(flexion.Last(MaxFlexLen)));
         return form != Forms.end() ? &(form->second) : NULL;
     }
 

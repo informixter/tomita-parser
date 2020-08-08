@@ -9,7 +9,9 @@
 #include <util/system/src_root.h>
 #include <util/stream/tempbuf.h>
 
-#include <stlport/exception>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/exception>
+#endif
 
 #include <cstdio>
 #include <cstdarg>

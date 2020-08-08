@@ -2,7 +2,12 @@
 
 #include <util/folder/dirut.h>
 
-#include <stlport/string>
+#ifdef USE_INTERNAL_STL
+    #include <stlport/string>
+#else
+    #include <string>
+    #define NStl std
+#endif
 
 #include <stdexcept>
 

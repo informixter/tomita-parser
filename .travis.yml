@@ -3,20 +3,16 @@ language: cpp
 os:
   - linux
 
-addons:
-  apt:
-    packages:
-      - cmake
-      - lua5.2
-
 jobs:
   include:
+
+    # GCC 4.8
     - dist: trusty
       compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.8']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
       env:
         - USE_INTERNAL_STL=yes CXX=g++-4.8
 
@@ -25,16 +21,16 @@ jobs:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.8']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
       env:
-        - USE_INTERNAL_STL=no  CXX=g++-4.8
+        - USE_INTERNAL_STL=no CXX=g++-4.8
 
     - dist: xenial
       compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.8']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
       env:
         - USE_INTERNAL_STL=yes CXX=g++-4.8
 
@@ -43,48 +39,415 @@ jobs:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.8']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
       env:
-        - USE_INTERNAL_STL=no  CXX=g++-4.8
+        - USE_INTERNAL_STL=no CXX=g++-4.8
 
-    - compiler: gcc
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-4.8
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-4.8
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-4.8
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-4.8
+
+
+    # GCC 5
+    - dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['cmake', 'lua5.2', 'g++-5']
       env:
-        - CXX=g++-5
+        - USE_INTERNAL_STL=yes CXX=g++-5
 
-    - compiler: gcc
+    - dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-5
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-5
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-5
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-5
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-5
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-5
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-5
+
+
+    # GCC 6
+    - dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['cmake', 'lua5.2', 'g++-6']
       env:
-        - CXX=g++-6
+        - USE_INTERNAL_STL=yes CXX=g++-6
 
-    - compiler: gcc
+    - dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-6
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-6
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-6
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-6
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-6
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-6
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-6
+
+
+    # GCC 7
+    - dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['cmake', 'lua5.2', 'g++-7']
       env:
-        - CXX=g++-7
+        - USE_INTERNAL_STL=yes CXX=g++-7
 
-    - compiler: gcc
+    - dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-7
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-7
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-7
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-7
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-7
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-7
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-7
+
+
+    # GCC 8
+    - dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['cmake', 'lua5.2', 'g++-8']
       env:
-        - CXX=g++-8
+        - USE_INTERNAL_STL=yes CXX=g++-8
 
-    - compiler: gcc
+    - dist: trusty
+      compiler: gcc
       addons:
         apt:
-          packages: ['cmake', 'lua5.2', 'g++-mingw-w64-x86-64']
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
       env:
-        - CXX=x86_64-w64-mingw32-g++
+        - USE_INTERNAL_STL=no CXX=g++-8
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-8
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-8
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-8
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-8
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-8
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-8
+
+
+    # GCC 9
+    - dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-9
+
+    - dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-9
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-9
+
+    - dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-9
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-9
+
+    - dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-9
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=yes CXX=g++-9
+
+    - dist: focal
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-9']
+      env:
+        - USE_INTERNAL_STL=no CXX=g++-9
 
 before_script:
     - mkdir ${TRAVIS_BUILD_DIR}/build

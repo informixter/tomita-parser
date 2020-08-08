@@ -328,7 +328,7 @@ TJsonValue &TJsonValue::operator[] (size_t idx) {
 
 TJsonValue &TJsonValue::operator[] (const TStringBuf& key) {
     SetType(JSON_MAP);
-    return (*Value.Map)[key];
+    return (*Value.Map)[Stroka(key)];
 }
 
 struct TDefaultsHolder {

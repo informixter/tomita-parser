@@ -1,4 +1,4 @@
-[![Travis](https://img.shields.io/travis/vbocharov/tomita-parser/master.svg?style=plastic)](https://travis-ci.org/vbocharov/tomita-parser)
+[![Travis](https://img.shields.io/travis/victorbocharov/tomita-parser/master.svg?style=plastic)](https://travis-ci.org/victorbocharov/tomita-parser)
 
 How to build?
 
@@ -14,7 +14,7 @@ How to build?
 ## Ubuntu
 
 1. sudo apt-get install build-essential cmake lua5.2
-2. git clone https://github.com/yandex/tomita-parser
+2. git clone https://github.com/victorbocharov/tomita-parser
 3. cd tomita-parser && mkdir build && cd build
 4. cmake ../src/ -DCMAKE_BUILD_TYPE=Release
 5. make

@@ -140,6 +140,7 @@ void TSimpleWordformIterator::operator++() {
 }
 
 void TSimpleWordformKit::SetDefaultText(const TSimpleLemma& lemma, const TWtringBuf& text) {
+    UNUSED(text);
     Lemma = &lemma;
 
     MystemFormsHandle* FormsHandle = Singleton<NLemmer::TSimpleLemmer>()->GetFormsHandle(lemma);

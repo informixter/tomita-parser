@@ -120,6 +120,7 @@ MystemFormsHandle* TSimpleLemmer::GetFormsHandleInner(TSymbol* text, int len, ui
                  for(; i != count; ++i) {
                      MystemLemmaHandle* h2 = GET_FUNC(Lib, MystemLemma)(analyses, i);
                      ui32 ruleId = GET_FUNC(Lib, MystemLemmaRuleId)(h2);
+                     UNUSED(ruleId);
                  }
              }
 
@@ -174,7 +175,7 @@ void TSimpleLemmer::DeleteAnalyses(MystemAnalysesHandle *analyses) {
 }
 
 void TSimpleLemmer::DeleteForms(MystemFormsHandle *forms) {
-    GET_FUNC(Lib, MystemDeleteForms)(forms);  
+    GET_FUNC(Lib, MystemDeleteForms)(forms);
 }
 
 size_t AnalyzeWord(const TChar* word, size_t len, TWLemmaArray& out, TLangMask langmask, const docLanguage* doclangs, const TAnalyzeWordOpt& opt) {

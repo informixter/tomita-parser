@@ -2,7 +2,7 @@ encoding "utf8";
 
 TTextMinerConfig {
   Dictionary = "bastard_mode//dic.gzt";
-  
+
   //PrettyOutput = "debug.html";
   //PrintTree = "tree.txt";
   //PrintRules = "rules.txt";
@@ -24,4 +24,5 @@ TTextMinerConfig {
   }
 
   BastardMode=no;
+  ForceRecompile=true;
 }

@@ -116,8 +116,8 @@ void CWordFormRegExp::Load(TInputStream* buffer) {
 const Stroka CWordFormRegExp::DebugString(int itemNo) const {
     const char* place;
     switch (Place) {
-        case ApplyToFirstWord: place = "wff";
-        case ApplyToLastWord: place = "wfl";
+        case ApplyToFirstWord: place = "wff"; break;
+        case ApplyToLastWord: place = "wfl"; break;
         default : place = "wfm";
     }
     const char* neg = IsNegative ? "~" : "";

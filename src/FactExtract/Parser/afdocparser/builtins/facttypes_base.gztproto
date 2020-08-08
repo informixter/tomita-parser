@@ -10,11 +10,9 @@ enum ECapitalization {
 };
 
 extend google.protobuf.FieldOptions {
-  optional ECapitalization normcase = 50820;    // h-regX
-  optional bool info = 50821;               // save text info
+    optional ECapitalization normcase = 50820;    // h-regX
+    optional bool info = 50821;                   // save text info
 }
-
-
 
 // a base fact type
 message TFact {
@@ -26,6 +24,3 @@ message TFio {}
 
 // date field
 message TDate {}
-
-
-

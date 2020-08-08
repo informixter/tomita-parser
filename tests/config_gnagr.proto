@@ -1,0 +1,27 @@
+encoding "utf8";
+
+TTextMinerConfig {
+  Dictionary = "gram_features/dic.gzt";
+
+  //PrettyOutput = "/tmp/PrettyOutput.html";
+  //PrintTree = "/tmp/tree.txt";
+  //PrintRules = "/tmp/rules.txt";
+
+  Articles = [
+    { Name = "gn-agr" }
+  ]
+
+  Facts = [
+    { Name = "F" }
+  ]
+
+  Output = {
+    Format = text;
+  }
+
+  Input = {
+    Type = dpl;
+  }
+
+  //ForceRecompile=true;
+}

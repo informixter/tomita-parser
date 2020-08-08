@@ -1,0 +1,47 @@
+encoding "utf8";
+
+import "base.proto";
+import "articles_base.proto";
+
+import "facttypes.proto";
+
+TAuxDicArticle "gnc-agr" {
+  key = { "tomita:gnc-agr.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "gnc-agr-neg" {
+  key = { "tomita:gnc-agr-neg.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "nc-agr" {
+  key = { "tomita:nc-agr.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "nc-agr-neg" {
+  key = { "tomita:nc-agr-neg.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "c-agr" {
+  key = { "tomita:c-agr.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "c-agr-neg" {
+  key = { "tomita:c-agr-neg.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "gn-agr" {
+  key = { "tomita:gn-agr.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "gn-agr-neg" {
+  key = { "tomita:gn-agr-neg.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "gc-agr" {
+  key = { "tomita:gc-agr.cxx" type=CUSTOM }
+}
+
+TAuxDicArticle "gc-agr-neg" {
+  key = { "tomita:gc-agr-neg.cxx" type=CUSTOM }
+}
+

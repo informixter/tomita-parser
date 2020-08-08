@@ -1,22 +1,63 @@
 language: c++
 sudo: false
-compiler:
-    - gcc
-install:
-    - export CXX="g++-4.8" CC="gcc-4.8"
-addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - cmake
-            - gcc-4.8
-            - g++-4.8
-            - lua5.2
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-4.8']
+      env:
+        - CXX=g++-4.8
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-5']
+      env:
+        - CXX=g++-5
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-6']
+      env:
+        - CXX=g++-6
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-7']
+      env:
+        - CXX=g++-7
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['cmake', 'lua5.2', 'g++-8']
+      env:
+        - CXX=g++-8
+
+    - compiler: gcc
+      addons:
+        apt:
+          packages: ['cmake', 'lua5.2', 'g++-mingw-w64-x86-64']
+      env:
+        - CXX=x86_64-w64-mingw32-g++
+
 before_script:
     - mkdir ${TRAVIS_BUILD_DIR}/build
     - cd ${TRAVIS_BUILD_DIR}/build
 script:
     - cmake -DCMAKE_BUILD_TYPE=Release ${TRAVIS_BUILD_DIR}/src
-    - make
+    - cmake --build .
+    - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
+    - unzip libmystem_c_binding.so.linux_x64.zip
+    - mv libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build/FactExtract/Parser/tomita-parser/
+    - ctest
 

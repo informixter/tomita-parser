@@ -189,14 +189,15 @@ void TFsPath::ListNames(yvector<Stroka>& children) const {
     if (!dir)
         ythrow TIoSystemError() << "failed to opendir " << Path_;
     for (;;) {
-        struct dirent de;
-        struct dirent* ok;
-        int r = readdir_r(dir.Get(), &de, &ok);
-        if (r != 0)
-            ythrow TIoSystemError() << "failed to readdir " << Path_;
-        if (ok == NULL)
-            return;
-        Stroka name(de.d_name);
+        struct dirent* de;
+        errno = 0;
+        de = readdir_with_lock(dir.Get());
+        if (de == NULL)
+            if (errno > 0)
+                ythrow TIoSystemError() << "failed to readdir " << Path_;
+            else
+                return;
+        Stroka name(de->d_name);
         if (name == "." || name == "..")
             continue;
         children.push_back(name);

@@ -125,12 +125,15 @@ _STLP_INLINE_LOOP _RandomAccessIter __find(_RandomAccessIter __first, _RandomAcc
   case 3:
     if (*__first == __val) return __first;
     ++__first;
+    /* Falls through. */
   case 2:
     if (*__first == __val) return __first;
     ++__first;
+    /* Falls through. */
   case 1:
     if (*__first == __val) return __first;
     //++__first;
+    /* Falls through. */
   case 0:
   default:
     return __last;
@@ -172,12 +175,15 @@ _STLP_INLINE_LOOP _RandomAccessIter __find_if(_RandomAccessIter __first, _Random
   case 3:
     if (__pred(*__first)) return __first;
     ++__first;
+    /* Falls through. */
   case 2:
     if (__pred(*__first)) return __first;
     ++__first;
+    /* Falls through. */
   case 1:
     if (__pred(*__first)) return __first;
       //++__first;
+    /* Falls through. */
   case 0:
   default:
     return __last;

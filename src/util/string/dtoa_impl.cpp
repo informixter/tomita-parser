@@ -1022,13 +1022,14 @@ STATIC inline double strtod(TBufIt s00, char** se)
     for(s = s00;;s++) switch(*s) {
         case '-':
             sign = 1;
-            /* no break */
+            /* Falls through. */
         case '+':
             if (*++s)
                 goto break2;
-            /* no break */
+            /* Falls through. */
         case 0:
             goto ret0;
+            /* Falls through. */
         case '\t':
         case '\n':
         case '\v':
@@ -1115,6 +1116,7 @@ STATIC inline double strtod(TBufIt s00, char** se)
         switch(c = *++s) {
             case '-':
                 esign = 1;
+                /* Falls through. */
             case '+':
                 c = *++s;
             }
@@ -2313,7 +2315,7 @@ STATIC inline char* dtoa(double dd, int mode, int ndigits, int *decpt, int *sign
             break;
         case 2:
             leftright = 0;
-            /* no break */
+            /* Falls through. */
         case 4:
             if (ndigits <= 0)
                 ndigits = 1;
@@ -2321,7 +2323,7 @@ STATIC inline char* dtoa(double dd, int mode, int ndigits, int *decpt, int *sign
             break;
         case 3:
             leftright = 0;
-            /* no break */
+            /* Falls through. */
         case 5:
             i = ndigits + k + 1;
             ilim = i;

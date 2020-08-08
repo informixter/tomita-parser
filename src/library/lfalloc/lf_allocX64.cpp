@@ -930,7 +930,7 @@ static FORCED_INLINE void LFFree(void *p)
         return;
     }
     uintptr_t chunk = ((char*)p - ALLOC_START) / N_CHUNK_SIZE;
-    ptrdiff_t nSizeIdx = chunkSizeIdx[chunk];
+    std::ptrdiff_t nSizeIdx = chunkSizeIdx[chunk];
     if (nSizeIdx <= 0) {
         LargeBlockFree(p);
         return;
@@ -972,7 +972,7 @@ static size_t LFGetSize(const void *p)
         return GetLargeBlockSize(p) * 4096ll;
     }
     uintptr_t chunk = ((char*)p - ALLOC_START) / N_CHUNK_SIZE;
-    ptrdiff_t nSizeIdx = chunkSizeIdx[chunk];
+    std::ptrdiff_t nSizeIdx = chunkSizeIdx[chunk];
     if (nSizeIdx <= 0)
         return GetLargeBlockSize(p) * 4096ll;
     return nSizeIdxToSize[nSizeIdx];
@@ -1017,15 +1017,15 @@ struct TChunkStats
     {
         if (pBlock && pBlock >= Start && pBlock < Finish) {
             ++FreeCount;
-            ptrdiff_t nShift = pBlock - Start;
-            ptrdiff_t nOffsetInStep = nShift & (N_CHUNK_SIZE - 1);
+            std::ptrdiff_t nShift = pBlock - Start;
+            std::ptrdiff_t nOffsetInStep = nShift & (N_CHUNK_SIZE - 1);
             Entries[nOffsetInStep / Size] = 1;
         }
     }
     void SetGlobalFree(char *ptr)
     {
-        ptrdiff_t nShift = ptr - Start;
-        ptrdiff_t nOffsetInStep = nShift & (N_CHUNK_SIZE - 1);
+        std::ptrdiff_t nShift = ptr - Start;
+        std::ptrdiff_t nOffsetInStep = nShift & (N_CHUNK_SIZE - 1);
         while (nOffsetInStep + Size <= N_CHUNK_SIZE) {
             ++FreeCount;
             Entries[nOffsetInStep / Size] = 1;
@@ -1043,8 +1043,8 @@ static void DumpMemoryBlockUtilizationLocked()
     char *bfList = (char*)blockFreeList.GetWholeList();
 
     DebugTraceMMgr("memory blocks utilisation stats:\n");
-    ptrdiff_t nTotalAllocated = 0, nTotalFree = 0, nTotalBadPages = 0, nTotalPages = 0, nTotalUsed = 0, nTotalLocked = 0;
-    ptrdiff_t nTotalGroupBlocks = 0;
+    std::ptrdiff_t nTotalAllocated = 0, nTotalFree = 0, nTotalBadPages = 0, nTotalPages = 0, nTotalUsed = 0, nTotalLocked = 0;
+    std::ptrdiff_t nTotalGroupBlocks = 0;
     char *entries;
     entries = (char*)SystemAlloc((N_CHUNK_SIZE / 4));
     for (size_t k = 0; k < N_CHUNKS; ++k) {

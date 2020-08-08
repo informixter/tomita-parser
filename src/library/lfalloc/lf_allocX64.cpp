@@ -688,7 +688,7 @@ static FORCED_INLINE int GlobalGroupAlloc(int nSizeIdx, char **buf)
     return 0;
 }
 
-static FORCED_INLINE void GlobalGroupFree(ptrdiff_t nSizeIdx, char **buf, int count)
+static FORCED_INLINE void GlobalGroupFree(std::ptrdiff_t nSizeIdx, char **buf, int count)
 {
     for (int startIdx = 0; startIdx < count;) {
         TFreeListGroup *g = (TFreeListGroup*)blockFreeList.Alloc();

@@ -5,8 +5,6 @@ os:
 
 jobs:
   include:
-
-    # GCC 4.8
     - dist: trusty
       compiler: gcc
       addons:
@@ -61,24 +59,7 @@ jobs:
       env:
         - USE_INTERNAL_STL=no CXX=g++-4.8
 
-    - dist: focal
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-4.8']
-      env:
-        - USE_INTERNAL_STL=yes CXX=g++-4.8
-
-    - dist: focal
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-4.8']
-      env:
-        - USE_INTERNAL_STL=no CXX=g++-4.8
-
+    # focal: Package 'g++-4.8' has no installation candidate
 
     # GCC 5
     - dist: trusty

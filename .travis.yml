@@ -1,10 +1,10 @@
 language: c++
-sudo: false
+
+internal_stl:
+  - USE_INTERNAL_STL=yes
+  - USE_INTERNAL_STL=no
 
 matrix:
-  internal_stl:
-    - USE_INTERNAL_STL=yes
-    - USE_INTERNAL_STL=no
   include:
     - compiler: gcc
       addons:

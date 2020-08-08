@@ -398,41 +398,8 @@ jobs:
 
 
     # G++ 10
-    - dist: trusty
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-10']
-      env:
-        - USE_INTERNAL_STL=yes CXX=g++-10
 
-    - dist: trusty
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-10']
-      env:
-        - USE_INTERNAL_STL=no CXX=g++-10
-
-    - dist: xenial
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-10']
-      env:
-        - USE_INTERNAL_STL=yes CXX=g++-10
-
-    - dist: xenial
-      compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['cmake', 'lua5.2', 'g++-10']
-      env:
-        - USE_INTERNAL_STL=no CXX=g++-10
+    # trusty, xenial: Couldn't find any package by regex 'g++-10'
 
     - dist: bionic
       compiler: gcc
@@ -482,5 +449,7 @@ script:
     - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
     - unzip libmystem_c_binding.so.linux_x64.zip
     - mv libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build/FactExtract/Parser/tomita-parser/
+    - cd ../examples/bornin/ && ../../build/bin/tomita-parser config.proto
+    - cd ${TRAVIS_BUILD_DIR}/build
     - ctest
 

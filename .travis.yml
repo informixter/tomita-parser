@@ -1,10 +1,16 @@
 language: c++
 
-internal_stl:
+os:
+  - linux
+
+dist:
+  - bionic
+
+env:
   - USE_INTERNAL_STL=yes
   - USE_INTERNAL_STL=no
 
-matrix:
+jobs:
   include:
     - compiler: gcc
       addons:

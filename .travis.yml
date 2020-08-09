@@ -446,21 +446,23 @@ before_script:
     - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
     - unzip libmystem_c_binding.so.linux_x64.zip
 script:
-    - mkdir ${TRAVIS_BUILD_DIR}/build_debug
-    - cd ${TRAVIS_BUILD_DIR}/build_debug
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DUSE_INTERNAL_STL=${USE_INTERNAL_STL} ${TRAVIS_BUILD_DIR}/src
-    - cmake --build . -- VERBOSE=1
-    - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_debug/bin/libmystem_c_binding.so
-    - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_debug/FactExtract/Parser/tomita-parser/libmystem_c_binding.so
-    - cd ../examples/bornin/ && ../../build_debug/bin/tomita-parser config.proto
-    - cd ${TRAVIS_BUILD_DIR}/build_debug
-    - ctest -VV
+    #    - mkdir ${TRAVIS_BUILD_DIR}/build_debug
+    #    - cd ${TRAVIS_BUILD_DIR}/build_debug
+    #    - cmake -DCMAKE_BUILD_TYPE=Debug -DUSE_INTERNAL_STL=${USE_INTERNAL_STL} ${TRAVIS_BUILD_DIR}/src
+    #    - cmake --build . -- VERBOSE=1
+    #    - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_debug/bin/libmystem_c_binding.so
+    #    - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_debug/FactExtract/Parser/tomita-parser/libmystem_c_binding.so
+    #    - cd ../examples/bornin/ && ../../build_debug/bin/tomita-parser config.proto
+    #    - cd ${TRAVIS_BUILD_DIR}/build_debug
+    #    - ctest -VV
     - mkdir ${TRAVIS_BUILD_DIR}/build_release
     - cd ${TRAVIS_BUILD_DIR}/build_release
-    - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_INTERNAL_STL=${USE_INTERNAL_STL} ${TRAVIS_BUILD_DIR}/src
+    - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_INTERNAL_STL=${USE_INTERNAL_STL} -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=false ${TRAVIS_BUILD_DIR}/src
     - cmake --build . -- VERBOSE=1
     - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_release/bin/libmystem_c_binding.so
     - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_release/FactExtract/Parser/tomita-parser/libmystem_c_binding.so
+    - ldd bin/tomita-parser
+    - file FactExtract/Parser/tomita-parser/tomita-parser
     - cd ../examples/bornin/ && ../../build_release/bin/tomita-parser config.proto
     - cd ${TRAVIS_BUILD_DIR}/build_release
     - ctest -VV

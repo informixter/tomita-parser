@@ -228,10 +228,10 @@ static inline bool _Stl_is_nan_or_inf(double x)
 #    else
 { return !finite(x); }
 #    endif
-static inline bool _Stl_is_neg_nan(double x)    { return std::isnan(x) && ( copysign(1., x) < 0 ); }
-static inline bool _Stl_is_inf(double x)        { return std::isinf(x); }
+static inline bool _Stl_is_neg_nan(double x)    { return isnan(x) && ( copysign(1., x) < 0 ); }
+static inline bool _Stl_is_inf(double x)        { return isinf(x); }
 // inline bool _Stl_is_neg_inf(double x)    { return isinf(x) < 0; }
-static inline bool _Stl_is_neg_inf(double x)    { return std::isinf(x) && x < 0; }
+static inline bool _Stl_is_neg_inf(double x)    { return isinf(x) && x < 0; }
 #  elif (defined (__unix) || defined (__unix__)) && \
          !defined (__APPLE__) && !defined (__DJGPP) && !defined(__osf__) && \
          !defined (_CRAY)

@@ -118,6 +118,7 @@ IF (PERL)
 ENDIF ()
 
 DEFAULT(BISON     bison)
+DEFAULT(M4        m4)
 DEFAULT(GCOV      gcov)
 DEFAULT(GCOV_OPTIONS  --long-file-names)
 DEFAULT(RM rm)

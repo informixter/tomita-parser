@@ -875,10 +875,12 @@ MACRO(JOIN values glue output)
 ENDMACRO ()
 
 
-TOOLDIR_EX(
-    contrib/tools/bison/bison BISON
-    contrib/tools/bison/m4 M4
-)
+IF (USE_INTERNAL_BISON)
+    TOOLDIR_EX(
+        contrib/tools/bison/bison BISON
+        contrib/tools/bison/m4 M4
+    )
+ENDIF()
 
 DEFAULT(BISON_FLAGS -v)
 
@@ -892,13 +894,24 @@ MACRO (BUILDWITH_BISON srcfile dstfile)
     GET_FILENAME_COMPONENT(LOCAL_BISON_DSTFILE_FILE ${dstfile} NAME_WE)
     GET_FILENAME_COMPONENT(LOCAL_BISON_DSTFILE_PATH ${dstfile} PATH)
     SET(LOCAL_BISON_DSTFILE_H "${LOCAL_BISON_DSTFILE_PATH}/${LOCAL_BISON_DSTFILE_FILE}.h")
-    ADD_CUSTOM_COMMAND(
-        OUTPUT ${dstfile} ${LOCAL_BISON_DSTFILE_H}
-        COMMAND "${BISON}" ${BISON_FLAGS} --m4=${M4} -d -o "${dstfile}" "${srcfile}"
-        MAIN_DEPENDENCY "${srcfile}"
-        DEPENDS "${srcfile}" bison m4 ${ARGN}
-        COMMENT "Building \"${dstfile}\"+\"${LOCAL_BISON_DSTFILE_H}\" with bison"
-    )
+
+    IF (USE_INTERNAL_BISON)
+        ADD_CUSTOM_COMMAND(
+            OUTPUT ${dstfile} ${LOCAL_BISON_DSTFILE_H}
+            COMMAND "${BISON}" ${BISON_FLAGS} --m4=${M4} -d -o "${dstfile}" "${srcfile}"
+            MAIN_DEPENDENCY "${srcfile}"
+            DEPENDS "${srcfile}" bison m4 ${ARGN}
+            COMMENT "Building \"${dstfile}\"+\"${LOCAL_BISON_DSTFILE_H}\" with bison"
+        )
+    ELSE()
+        ADD_CUSTOM_COMMAND(
+            OUTPUT ${dstfile} ${LOCAL_BISON_DSTFILE_H}
+            COMMAND "${BISON}" ${BISON_FLAGS} -d -o "${dstfile}" "${srcfile}"
+            MAIN_DEPENDENCY "${srcfile}"
+            DEPENDS "${srcfile}" ${ARGN}
+            COMMENT "Building \"${dstfile}\"+\"${LOCAL_BISON_DSTFILE_H}\" with bison"
+        )
+    ENDIF()
     SOURCE_GROUP("Custom Builds" FILES ${srcfile})
     DIR_ADD_GENERATED_INC(${LOCAL_BISON_DSTFILE_H})
     DIR_ADD_GENERATED_SRC(${dstfile})

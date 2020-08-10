@@ -28,7 +28,7 @@ ARG USE_INTERNAL_STL=no
 ARG USE_INTERNAL_BISON=no
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release -DUSE_INTERNAL_STL=$USE_INTERNAL_STL -DUSE_INTERNAL_BISON=$USE_INTERNAL_BISON ../src
-RUN cmake --build . -- -j=2 VERBOSE=1
+RUN cmake --build . -- -j 2 VERBOSE=1
 
 RUN ln -s /tomita-parser/libmystem_c_binding.so bin/libmystem_c_binding.so
 RUN ln -s /tomita-parser/libmystem_c_binding.so FactExtract/Parser/tomita-parser/libmystem_c_binding.so

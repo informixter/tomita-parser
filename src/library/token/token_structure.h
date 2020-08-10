@@ -116,7 +116,7 @@ public:
     void push_back(size_t offset, size_t len, ETokenType type = TOKEN_WORD, ETokenDelim tokenDelim = TOKDELIM_NULL, EHyphenType hyphen = HYPHEN_NONE,
         ui16 suffixLen = 0, ui16 prefixLen = 0)
     {
-        YASSERT(type == TOKEN_WORD || type == TOKEN_NUMBER || type == TOKEN_MARK || TOKEN_FLOAT);
+        YASSERT(type == TOKEN_WORD || type == TOKEN_NUMBER || type == TOKEN_MARK || type == TOKEN_FLOAT);
         if (Tokens.size() == MAX_SUBTOKENS) {
             // no more room - append to the last subtoken
             TCharSpan& span = Tokens.back();

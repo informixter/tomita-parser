@@ -1,5 +1,9 @@
 #include "articles_parser.h"
-#include <FactExtract/Parser/auxdictlib/articles_syn_yacc.h>
+#ifdef USE_INTERNAL_BISON
+    #include <FactExtract/Parser/auxdictlib/articles_syn_yacc.h>
+#else
+    #include <FactExtract/Parser/auxdictlib/articles_syn_yacc.hpp>
+#endif
 
 #include <util/string/util.h>
 #include <util/stream/str.h>

@@ -1,7 +1,11 @@
 %{
 
 #include "articles_parser.h"
-#include "articles_syn_yacc.h"
+#ifdef USE_INTERNAL_BISON
+    #include "articles_syn_yacc.h"
+#else
+    #include "articles_syn_yacc.hpp"
+#endif
 
 using std::cin;
 using std::cout;
@@ -61,9 +65,9 @@ poulation		("НАСЕЛЕНИЕ")
 geo_lemma		("ГЕО_ЛЕММА")
 y_geo_id		("Я_ГЕО_ИД")
 ant_kw			("АНТ")
-comma_kw		("ЗПТ") 
-light_kw		("ЛЕГКОЕ_КС") 
-s0_kw   		("С0") 
+comma_kw		("ЗПТ")
+light_kw		("ЛЕГКОЕ_КС")
+s0_kw   		("С0")
 file			("file")
 tomita			("tomita")
 alg				("alg")
@@ -88,119 +92,119 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 
 
 <INITIAL,RUS_WORD_ST>{include}			{
-							
+
 							//printf("INCLUDE_KW\n" );
 							BEGIN(RUS_WORD_ST);
 							return INCLUDE_KW;
-			
+
 }
 
 
 <INITIAL,RUS_WORD_ST>{fact_interp}			{
-							
+
 							//printf("FACT_INTERP_KW\n" );
 							BEGIN(FACT_TYPE_DESCR);
 							return FACT_INTERP_KW;
-			
+
 }
 
 <INITIAL,RUS_WORD_ST>{fact_type}			{
-							
+
 							//printf("FACT_TYPE_KW\n" );
 							BEGIN(FACT_TYPE_DESCR);
 							return FACT_TYPE_KW;
-			
+
 }
 
 <INITIAL,RUS_WORD_ST>{fact_type_nolead}			{
-							
+
 							//printf("FACT_TYPE_NOLOEAD_KW\n" );
 							BEGIN(FACT_TYPE_DESCR);
 							return FACT_TYPE_NOLEAD_KW;
-			
+
 }
 
 <INITIAL,RUS_WORD_ST>{fact_type_temp}			{
-							
+
 							//printf("FACT_TYPE_TEMP_KW\n" );
 							BEGIN(FACT_TYPE_DESCR);
 							return FACT_TYPE_TEMP_KW;
-			
+
 }
 
 <FACT_TYPE_DESCR>"}"			{
-							
+
 							//printf("'%c'\n", YYText()[0]);
 							BEGIN(INITIAL);
 							return ((int)YYText()[0]);
-			
+
 }
 
 <FACT_TYPE_DESCR>")"			{
-							
+
 							//printf("'%c'\n", YYText()[0]);
 							BEGIN(INITIAL);
 							return ((int)YYText()[0]);
-			
+
 }
 
 <FACT_TYPE_DESCR>("true"|"false")	{
-							
-							//printf("FACT_FIELD_NAME_KW\n" );							
+
+							//printf("FACT_FIELD_NAME_KW\n" );
 							return TRUE_OR_FALSE_KW;
-			
+
 }
 
 
-<FACT_TYPE_DESCR>("$"({eng_alpha})+)	{  
-							
-							//printf("VAR_FACT_VAL\n" );							
+<FACT_TYPE_DESCR>("$"({eng_alpha})+)	{
+
+							//printf("VAR_FACT_VAL\n" );
 							return VAR_FACT_VAL;
-			
+
 }
 
 
-<FACT_TYPE_DESCR>("from")	{							
-							//printf("FROM_OPERATOR\n" );							
+<FACT_TYPE_DESCR>("from")	{
+							//printf("FROM_OPERATOR\n" );
 							return FROM_OPERATOR;
-			
+
 }
 
 <WORDS_IN_QUOTES>[^\n\"\'}]*	{
-										//printf("FIELD_VALUE\n" );							
+										//printf("FIELD_VALUE\n" );
 										return FIELD_VALUE;
-									}				
+									}
 
 
 <WORDS_IN_QUOTES_FACT_TYPE>[^\n\"\'}]*	{
-										//printf("FIELD_VALUE\n" );							
+										//printf("FIELD_VALUE\n" );
 										return FIELD_VALUE;
-									}				
+									}
 
 <FACT_TYPE_DESCR>{fact_field_name}	{
-							
-							//printf("FACT_FIELD_NAME_KW\n" );							
+
+							//printf("FACT_FIELD_NAME_KW\n" );
 							return FACT_FIELD_NAME_KW;
-			
+
 }
 
 <FACT_TYPE_DESCR>("\""|"\'")		{
-						
-						BEGIN(WORDS_IN_QUOTES_FACT_TYPE);									
+
+						BEGIN(WORDS_IN_QUOTES_FACT_TYPE);
 						//printf("'%c' - state FACT_TYPE_DESCR\n", YYText()[0]);
 						return ((int)YYText()[0]);
 					}
 
 
 <INITIAL,RUS_WORD_ST>("\""|"\'")		{
-						
-						BEGIN(WORDS_IN_QUOTES);									
+
+						BEGIN(WORDS_IN_QUOTES);
 						//printf("'%c' - state FACT_TYPE_DESCR\n", YYText()[0]);
 						return ((int)YYText()[0]);
 					}
 
 <WORDS_IN_QUOTES_FACT_TYPE>("\""|"\'")		{
-						BEGIN(FACT_TYPE_DESCR);									
+						BEGIN(FACT_TYPE_DESCR);
 						//printf("'%c' - state WORDS_IN_QUOTES_FACT_TYPE\n", YYText()[0]);
 						return ((int)YYText()[0]);
 					}
@@ -215,7 +219,7 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 
 <INITIAL,RUS_WORD_ST>{title_kw}			{
 						//printf("TITLE_KW\n" );
-						BEGIN(INITIAL);				
+						BEGIN(INITIAL);
 						return TITLE_KW;
 					}
 
@@ -227,30 +231,30 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 
 <RUS_WORD_ST>{file}	{
 						//printf("'%s'(file)\n", YYText());
-						return FILE_KW;						
+						return FILE_KW;
 					}
-					
+
 <RUS_WORD_ST>{tomita}	{
-						//printf("TOMITA_KW\n");						
-						return TOMITA_KW;						
+						//printf("TOMITA_KW\n");
+						return TOMITA_KW;
 					}
 
 <RUS_WORD_ST>{alg}	{
-						//printf("ALG_KW\n");		
-						BEGIN(INITIAL);				
-						return ALG_KW;						
+						//printf("ALG_KW\n");
+						BEGIN(INITIAL);
+						return ALG_KW;
 					}
 
-					
+
 <RUS_WORD_ST>{file_name}	{
 						//printf("'%s'(FILE_NAME)\n", YYText());
 						BEGIN(INITIAL);
-						return FILE_NAME;						
+						return FILE_NAME;
 					}
 
 <RUS_WORD_ST>{rus_word}	{
 						//printf("'%s'(rus_word)\n", YYText());
-						return RUS_WORD;						
+						return RUS_WORD;
 					}
 
 <INITIAL,RUS_WORD_ST>{content_kw}		{
@@ -282,7 +286,7 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						BEGIN(INITIAL);
 						return DIR_KW;
 					}
-					
+
 <INITIAL,RUS_WORD_ST>{dir_single_kw}		{
 						//printf("DIR_KW\n" );
 						BEGIN(INITIAL);
@@ -295,72 +299,72 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						BEGIN(INITIAL);
 						return TYPE_KW;
 					}
-				
+
 <INITIAL,RUS_WORD_ST>{type_kw_kw}			{
 						//printf("TYPE_KW\n" );
 						BEGIN(INITIAL);
 						return TYPE_KW_KW;
 					}
-					
 
-<INITIAL,RUS_WORD_ST>{geo_alg} {					
+
+<INITIAL,RUS_WORD_ST>{geo_alg} {
 						//printf("GEO_ALG_KW\n" );
 						BEGIN(INITIAL);
 						return GEO_ALG_KW;
 					}
-					
-<INITIAL,RUS_WORD_ST>{geo_part} {					
+
+<INITIAL,RUS_WORD_ST>{geo_part} {
 						//printf("GEO_PART_KW\n" );
 						BEGIN(INITIAL);
 						return GEO_PART_KW;
-					}		
+					}
 
-<INITIAL,RUS_WORD_ST>"ЦЕЛЬ" {					
+<INITIAL,RUS_WORD_ST>"ЦЕЛЬ" {
 						//printf("GEO_PART_KW\n" );
 						BEGIN(INITIAL);
 						return GOAL_KW;
-					}		
+					}
 
-					
-<INITIAL,RUS_WORD_ST>{poulation} {					
+
+<INITIAL,RUS_WORD_ST>{poulation} {
 						//printf("POPULATION_KW\n" );
 						BEGIN(INITIAL);
 						return POPULATION_KW;
-					}		
-			
+					}
 
 
-<INITIAL,RUS_WORD_ST>{y_geo_id}		{					
+
+<INITIAL,RUS_WORD_ST>{y_geo_id}		{
 						//printf("Y_GEO_ID\n" );
 						BEGIN(INITIAL);
 						return Y_GEO_ID;
 					}
-			
-<INITIAL,RUS_WORD_ST>{geo_lemma}		{					
+
+<INITIAL,RUS_WORD_ST>{geo_lemma}		{
 						//printf("GEO_LEMMA_KW\n" );
 						BEGIN(INITIAL);
 						return LEMMA_KW;
 					}
 
-<INITIAL,RUS_WORD_ST>"ЛЕММА"		{					
+<INITIAL,RUS_WORD_ST>"ЛЕММА"		{
 						//printf("GEO_LEMMA_KW\n" );
 						BEGIN(INITIAL);
 						return LEMMA_KW;
 					}
-					
-<INITIAL,RUS_WORD_ST>"ЦЕНТР"		{					
+
+<INITIAL,RUS_WORD_ST>"ЦЕНТР"		{
 						//printf("GEO_CENTER_KW\n" );
 						BEGIN(INITIAL);
 						return GEO_CENTER_KW;
 					}
-										
-<INITIAL,RUS_WORD_ST>"НЕИЗМ"		{					
+
+<INITIAL,RUS_WORD_ST>"НЕИЗМ"		{
 						//printf("INCHANGEABLE_KW\n" );
 						BEGIN(INITIAL);
 						return INCHANGEABLE_KW;
 					}
 
-<INITIAL,RUS_WORD_ST>"ВСЕГДА"		{					
+<INITIAL,RUS_WORD_ST>"ВСЕГДА"		{
 						//printf("ALWAYS_KW\n" );
 						BEGIN(INITIAL);
 						return ALWAYS_KW;
@@ -384,7 +388,7 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						BEGIN(INITIAL);
 						return MORPH_I_KW;
 					}
-					
+
 <INITIAL,RUS_WORD_ST>{sin_r_kw}			{
 						//printf("SYN_R_KW\n" );
 						BEGIN(INITIAL);
@@ -418,8 +422,8 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						//printf("END_COMMA_KW\n" );
 						BEGIN(INITIAL);
 						return END_COMMA_KW;
-					}					
-					
+					}
+
 <INITIAL,RUS_WORD_ST>{s0_kw}	{
 						//printf("S0_KW\n" );
 						BEGIN(INITIAL);
@@ -431,7 +435,7 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						BEGIN(INITIAL);
 						return LIGHT_KW;
 					}
-					
+
 <INITIAL,RUS_WORD_ST>{comp_by_lemma_kw}	{
 						//printf("COMP_BY_LEMMA_KW\n" );
 						BEGIN(INITIAL);
@@ -441,78 +445,78 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 <INITIAL,RUS_WORD_ST>{order}	{
 						//printf("ORDER_KW\n" );
 						BEGIN(INITIAL);
-						return ORDER_KW;					
+						return ORDER_KW;
 					}
 
 <INITIAL,RUS_WORD_ST>{conj_pos_kw}	{
 						//printf("CONJ_POS_KW\n" );
 						BEGIN(INITIAL);
-						return CONJ_POS_KW;					
+						return CONJ_POS_KW;
 					}
 
 <INITIAL,RUS_WORD_ST>{fr_type_kw}	{
 						//printf("FR_TYPE_KW\n" );
 						BEGIN(INITIAL);
-						return FR_TYPE_KW;					
+						return FR_TYPE_KW;
 					}
-					
-<INITIAL,RUS_WORD_ST>{main_word}	{					
+
+<INITIAL,RUS_WORD_ST>{main_word}	{
 						//printf("MAIN_WORD_KW\n" );
 						BEGIN(INITIAL);
-						return MAIN_WORD_KW;					
+						return MAIN_WORD_KW;
 					}
-					
-					
+
+
 
 <INITIAL,RUS_WORD_ST>{coord_kw} {
 						//printf("COORD_FUNC_KW\n" );
 						BEGIN(INITIAL);
-						return COORD_FUNC_KW;					
+						return COORD_FUNC_KW;
 					}
-					
+
 <INITIAL,RUS_WORD_ST>{prefix_kw} {
 						//printf("PREFIX_KW\n" );
 						BEGIN(INITIAL);
-						return PREFIX_KW;					
+						return PREFIX_KW;
 					}
 
 
 <INITIAL,RUS_WORD_ST>{corr_kw} {
 						//printf("CORR_KW\n" );
 						BEGIN(INITIAL);
-						return CORR_KW;					
+						return CORR_KW;
 					}
 
 
 <INITIAL,RUS_WORD_ST>{ambig_kw} {
 						//printf("AMBIG_KW\n" );
 						BEGIN(INITIAL);
-						return AMBIG_KW;					
+						return AMBIG_KW;
 					}
 
 
 <INITIAL,RUS_WORD_ST>{ant_kw} {
 						//printf("ANT_KW\n" );
 						BEGIN(INITIAL);
-						return ANT_KW;					
+						return ANT_KW;
 					}
 
 <INITIAL,RUS_WORD_ST>{comma_kw} {
 						//printf("COMMA_KW\n" );
 						BEGIN(INITIAL);
-						return COMMA_KW;					
+						return COMMA_KW;
 					}
 
 <INITIAL,RUS_WORD_ST>{modal_kw}	{
 						//printf("MODAL_KW\n" );
 						BEGIN(INITIAL);
-						return MODAL_KW;					
+						return MODAL_KW;
 					}
-					
+
 <INITIAL,RUS_WORD_ST>{follow_kw}	{
 						//printf("FOLLOW_KW\n" );
 						BEGIN(INITIAL);
-						return FOLLOW_KW;					
+						return FOLLOW_KW;
 					}
 
 
@@ -520,35 +524,35 @@ rus_word		({eng_alpha_low})*("-")?((({rus_alpha_low})+)((\.)?))((({rus_alpha_low
 						//printf("valencie_name\n" );
 						BEGIN(INITIAL);
 						return VALENCIE_NAME_KW;
-					}					
+					}
 
 {field_value}		{
-						//printf("FIELD_VALUE\n");						
+						//printf("FIELD_VALUE\n");
 						return 	FIELD_VALUE;
 					}
-					
+
 
 
 <INITIAL,RUS_WORD_ST>"#"    BEGIN(COMMENT);
 <INITIAL,RUS_WORD_ST>"//"   BEGIN(COMMENT);
 
-<COMMENT>[^\n]*				
+<COMMENT>[^\n]*
 
-<COMMENT>\n				BEGIN(INITIAL);							
+<COMMENT>\n				BEGIN(INITIAL);
 
 
 <FACT_TYPE_DESCR>"#"    BEGIN(FACT_TYPE_DESCR_COMMENT);
 <FACT_TYPE_DESCR>"//"   BEGIN(FACT_TYPE_DESCR_COMMENT);
 
-<FACT_TYPE_DESCR_COMMENT>[^\n]*				
+<FACT_TYPE_DESCR_COMMENT>[^\n]*
 
-<FACT_TYPE_DESCR_COMMENT>\n				BEGIN(FACT_TYPE_DESCR);							
+<FACT_TYPE_DESCR_COMMENT>\n				BEGIN(FACT_TYPE_DESCR);
 
 
-<INITIAL,RUS_WORD_ST,FACT_TYPE_DESCR>{ws}   
+<INITIAL,RUS_WORD_ST,FACT_TYPE_DESCR>{ws}
 
- 
-<INITIAL,RUS_WORD_ST,FACT_TYPE_DESCR>.  {						
+
+<INITIAL,RUS_WORD_ST,FACT_TYPE_DESCR>.  {
 						//printf("'%c'\n", YYText()[0]);
 						return ((int)YYText()[0]);
 					}

@@ -164,7 +164,7 @@ ELSE ()
             SET(__pie_gcc_flag_ "")
         ENDIF()
 
-        IF (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8)
+        IF (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.7)
             SET(__use_c99_math_ "-D_GLIBCXX11_USE_C99_MATH")
         ELSE()
             SET(__use_c99_math_ "")

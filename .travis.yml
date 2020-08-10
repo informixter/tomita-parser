@@ -445,6 +445,7 @@ before_script:
     - cd ${TRAVIS_BUILD_DIR}
     - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
     - unzip libmystem_c_binding.so.linux_x64.zip
+    - apt-get install gdb
 script:
     #    - mkdir ${TRAVIS_BUILD_DIR}/build_debug
     #    - cd ${TRAVIS_BUILD_DIR}/build_debug
@@ -463,7 +464,7 @@ script:
     - ln -s ${TRAVIS_BUILD_DIR}/libmystem_c_binding.so ${TRAVIS_BUILD_DIR}/build_release/FactExtract/Parser/tomita-parser/libmystem_c_binding.so
     - ldd bin/tomita-parser
     - file FactExtract/Parser/tomita-parser/tomita-parser
-    - bin/tomita-parser
+    - echo 'r' | gdb bin/tomita-parser
     - cd ../examples/bornin/ && ../../build_release/bin/tomita-parser config.proto
     - cd ${TRAVIS_BUILD_DIR}/build_release
     - ctest -VV

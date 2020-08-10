@@ -1,0 +1,41 @@
+FROM DISTRIB_PLACEHOLDER
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get clean && apt-get update && apt-get install -y vim git bison wget unzip cmake lua5.2 software-properties-common
+RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
+
+ARG COMPILER_VERSION
+
+RUN apt-get update && apt-get install -y g++-$COMPILER_VERSION
+
+ENV CC /usr/bin/gcc-$COMPILER_VERSION
+ENV CXX /usr/bin/g++-$COMPILER_VERSION
+RUN echo CC=$CC CXX=$CXX
+
+RUN git clone --branch=no_stlport https://github.com/victorbocharov/tomita-parser.git
+
+WORKDIR /tomita-parser
+RUN wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
+RUN unzip libmystem_c_binding.so.linux_x64.zip
+
+RUN mkdir build
+
+RUN cmake --version
+WORKDIR /tomita-parser/build
+
+ARG USE_INTERNAL_STL=no
+ARG USE_INTERNAL_BISON=no
+
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DUSE_INTERNAL_STL=$USE_INTERNAL_STL -DUSE_INTERNAL_BISON=$USE_INTERNAL_BISON ../src
+RUN make
+
+RUN ln -s /tomita-parser/libmystem_c_binding.so bin/libmystem_c_binding.so
+RUN ln -s /tomita-parser/libmystem_c_binding.so FactExtract/Parser/tomita-parser/libmystem_c_binding.so
+
+WORKDIR /tomita-parser/examples/bornin
+RUN ../../build/bin/tomita-parser config.proto
+
+WORKDIR /tomita-parser/build
+RUN ctest -VV
+

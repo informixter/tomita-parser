@@ -16,4 +16,4 @@ before_script:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}/docker
-  - sed 's/DISTRIB_PLACEHOLDER/$DISTRIB/' Dockerfile-for-travis | docker build --build-arg COMPILER_VERSION=$COMPILER_VERSION --file - .
+  - sed "s/DISTRIB_PLACEHOLDER/$DISTRIB/" Dockerfile-for-travis | docker build --build-arg COMPILER_VERSION=$COMPILER_VERSION --file - .
